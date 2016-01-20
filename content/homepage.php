@@ -1,7 +1,13 @@
 <?php
 	
 	include_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/db_connect.php';
+	include_once './includes/functions.php';
 
+	/*
+		Select all columns in pay_levels table, and
+		select the Min, Med, and Max for each JobCode
+		in the all_active_fac_staff table
+	*/
 	$sel_all_payLevels_sql = "
 		SELECT p.*, c.*
 		FROM hrodt.pay_levels p
@@ -72,76 +78,41 @@
 				<th>Pay Plan</th>
 				<th>Contract</th>
 				<th>IPEDS SOCs</th>
-				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<form
-				name="payLevelForm"
-				id="payLevelForm"
-				role="form"
-				method="post"
-				action="">
-
-				<?php
-
-				$benchID = 0; // Incremental benchIDs
-				// For each row in query
-				while ($row = $sel_all_payLevels_res->fetch_assoc()){
-				?>
-				<tr>
-					<td><?php echo $row['PayLevel']; ?></td>
-						<td><?php echo $row['JobCode']; ?></td>
-						<td><?php echo $row['JobTitle']; ?></td>
-						<td><?php echo '$' . number_format($row['MinSal'], 2, '.', ','); ?></td>
-						<td><?php echo '$' . number_format($row['MedSal'], 2, '.', ','); ?></td>
-						<td><?php echo '$' . number_format($row['MaxSal'], 2, '.', ','); ?></td>
-						<td><?php echo '$' . number_format($row['ActMinSal'], 2, '.', ','); ?></td>
-						<td><?php echo '$' . number_format($row['ActMedSal'], 2, '.', ','); ?></td>
-						<td><?php echo '$' . number_format($row['ActMaxSal'], 2, '.', ','); ?></td>
-						<td>
-							<input
-								type="text"
-								name="bench<?php echo ++$benchID; ?>"
-								id="bench<?php echo $benchID; ?>">
-						</td>
-						<td><?php echo $row['FLSA']; ?></td>
-						<td><?php echo $row['UnionCode']; ?></td>
-						<td><?php echo $row['OldPayGrade']; ?></td>
-						<td><?php echo $row['JobFamily']; ?></td>
-						<td><?php echo $row['PayPlan']; ?></td>
-						<td><?php echo $row['Contract']; ?></td>
-						<td><?php echo $row['IPEDS_SOCs']; ?></td>			
-
-						<td class="center">
-							<button
-								id="edit_<?php echo $row['PLID']; ?>"
-								type="button"
-								class="edit_button btn btn-default confirm"
-								style="margin-right:4px;"
-								data-toggle="confirmation">
-								
-								<span class="edit_button glyphicon glyphicon-pencil"></span>
-							</button>
-							<button
-								id="del_<?php echo $row['PLID']; ?>"
-								type="button"
-								class="del_button btn btn-default">
-								
-								<span class="del_button glyphicon glyphicon-remove"></span>
-							</button>
-						</td>
-					</tr>
-				<?php } ?>
-			</form>
+			<?php
+			$benchID = 0; // Incremental benchIDs
+			// For each row in query
+			while ($row = $sel_all_payLevels_res->fetch_assoc()){
+			?>
+			<tr>
+				<td><?php echo $row['PayLevel']; ?></td>
+					<td><?php echo $row['JobCode']; ?></td>
+					<td><?php echo $row['JobTitle']; ?></td>
+					<td><?php echo '$' . number_format($row['MinSal'], 2, '.', ','); ?></td>
+					<td><?php echo '$' . number_format($row['MedSal'], 2, '.', ','); ?></td>
+					<td><?php echo '$' . number_format($row['MaxSal'], 2, '.', ','); ?></td>
+					<td><?php echo '$' . number_format($row['ActMinSal'], 2, '.', ','); ?></td>
+					<td><?php echo '$' . number_format($row['ActMedSal'], 2, '.', ','); ?></td>
+					<td><?php echo '$' . number_format($row['ActMaxSal'], 2, '.', ','); ?></td>
+					<td><?php /* Benchmark */ ?></td>
+					<td>
+						<?php 
+						echo convertFLSA($row['FLSA'], 'descr');
+						?>
+					</td>
+					<td><?php echo $row['UnionCode']; ?></td>
+					<td><?php echo $row['OldPayGrade']; ?></td>
+					<td><?php echo $row['JobFamily']; ?></td>
+					<td><?php echo $row['PayPlan']; ?></td>
+					<td><?php echo convertYesNo($row['Contract']); ?></td>
+					<td><?php echo $row['IPEDS_SOCs']; ?></td>			
+				</tr>
+			<?php } ?>
 		</tbody>
 	</table>
-
-
 </div>
-		
-
-
 
 <?php mysqli_close($conn); ?>
 		

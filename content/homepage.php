@@ -2,14 +2,48 @@
 	
 	include_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/db_connect.php';
 
-	$sel_all_payLevels = "
-		SELECT *
-		FROM hrodt.pay_levels
-		ORDER BY JobCode ASC
+	$sel_all_payLevels_sql = "
+		SELECT p.*, c.*
+		FROM hrodt.pay_levels p
+		JOIN (
+			SELECT JobCode,
+				MIN(a.Annual_Rt) AS ActMinSal,
+				(SUBSTRING_INDEX(		-- left median: max value in lower half
+					SUBSTRING_INDEX(
+						GROUP_CONCAT(	-- list all values in ascending order
+							a.Annual_Rt
+							ORDER BY a.Annual_Rt
+						),
+						',',
+						CEILING(COUNT(*)/2)		-- left half of the list
+					),
+					',',
+					-1		-- keep only the last value in the list
+				) +
+				SUBSTRING_INDEX(	-- right median: min value in upper half
+					SUBSTRING_INDEX(
+						GROUP_CONCAT(	-- list all values in ascending order
+							a.Annual_Rt
+							ORDER BY a.Annual_Rt
+						),
+						',',
+						-CEILING(COUNT(*)/2)	-- right half of the list
+					),
+					',',
+					1	-- keep only the first value in the list
+				)
+			) /2
+			AS ActMedSal,
+			MAX(a.Annual_Rt) AS ActMaxSal
+		FROM hrodt.all_active_fac_staff a
+		GROUP BY JobCode
+		) AS c
+		ON p.JobCode = c.JobCode
+		ORDER BY p.JobCode ASC, p.PayLevel
 	";
 
 	// Run Query
-	if (!$qry_result = $conn->query($sel_all_payLevels)){
+	if (!$sel_all_payLevels_res = $conn->query($sel_all_payLevels_sql)){
 		echo "Query failed: (" . $conn->errno . ") " . $conn->error;
 	}
 ?>	
@@ -53,7 +87,7 @@
 
 				$benchID = 0; // Incremental benchIDs
 				// For each row in query
-				while ($row = $qry_result->fetch_assoc()){
+				while ($row = $sel_all_payLevels_res->fetch_assoc()){
 				?>
 				<tr>
 					<td><?php echo $row['PayLevel']; ?></td>
@@ -62,9 +96,9 @@
 						<td><?php echo '$' . number_format($row['MinSal'], 2, '.', ','); ?></td>
 						<td><?php echo '$' . number_format($row['MedSal'], 2, '.', ','); ?></td>
 						<td><?php echo '$' . number_format($row['MaxSal'], 2, '.', ','); ?></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td><?php echo '$' . number_format($row['ActMinSal'], 2, '.', ','); ?></td>
+						<td><?php echo '$' . number_format($row['ActMedSal'], 2, '.', ','); ?></td>
+						<td><?php echo '$' . number_format($row['ActMaxSal'], 2, '.', ','); ?></td>
 						<td>
 							<input
 								type="text"

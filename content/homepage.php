@@ -1,24 +1,17 @@
 <?php
 	
-	// Connect to DB
-	$conn = mysqli_connect($dbInfo['dbIP'], $dbInfo['user'], $dbInfo['password'], $dbInfo['dbName']);
-	if ($conn->connect_errno){
-		echo "Failed to connect to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
-	}
+	include_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/db_connect.php';
 
-	$sql = "
+	$sel_all_payLevels = "
 		SELECT *
-		FROM " . $payLevels_table . "
-		ORDER BY JobCode ASC";
+		FROM hrodt.pay_levels
+		ORDER BY JobCode ASC
+	";
 
 	// Run Query
-	if (!($qry_result = $conn->query($sql))){
+	if (!$qry_result = $conn->query($sel_all_payLevels)){
 		echo "Query failed: (" . $conn->errno . ") " . $conn->error;
-		echo "<br />" . $sql;
 	}
-
-	// Close DB connection
-	mysqli_close($conn);
 ?>	
 
 <div class="container-fluid">
@@ -49,59 +42,63 @@
 			</tr>
 		</thead>
 		<tbody>
-			<form name="payLevelForm" action="">
+			<form
+				name="payLevelForm"
+				id="payLevelForm"
+				role="form"
+				method="post"
+				action="">
 
 				<?php
 
 				$benchID = 0; // Incremental benchIDs
 				// For each row in query
 				while ($row = $qry_result->fetch_assoc()){
-					echo '<tr>';
-						echo '<td>' . $row['PayLevel'] . '</td>';
-						echo '<td>' . $row['JobCode'] . '</td>';
-						echo '<td>' . $row['JobTitle'] . '</td>';
-						echo '<td>$' . number_format($row['MinSal'], 2, '.', ',') . '</td>';
-						echo '<td>$' . number_format($row['MedSal'], 2, '.', ',') . '</td>';
-						echo '<td>$' . number_format($row['MaxSal'], 2, '.', ',') . '</td>';
-						echo '<td>' . '</td>';
-						echo '<td>' . '</td>';
-						echo '<td>' . '</td>';
-						echo '<td>';
-							echo '<input ' .
-									'type="text" ' .
-									'name="bench' . ++$benchID . '" ' .
-									'id="bench' . ++$benchID .
-									'">';
-						echo '</td>';
-						echo '<td>' . $row['FLSA'] . '</td>';
-						echo '<td>' . $row['UnionCode'] . '</td>';
-						echo '<td>' . $row['OldPayGrade'] . '</td>';
-						echo '<td>' . $row['JobFamily'] . '</td>';
-						echo '<td>' . $row['PayPlan'] . '</td>';
-						echo '<td>' . $row['Contract'] . '</td>';
-						echo '<td>' . $row['IPEDS_SOCs'] . '</td>';			
-
-						echo '<td class="center">';
-							echo '<button ' .
-									'id="edit_' . $row['PLID'] . '" ' .
-									'type="button" ' .
-									'class="edit_button btn btn-default confirm" ' .
-									'style="margin-right:4px;" ' .
-									'data-toggle="confirmation" ' .
-									'>';
-								echo '<span class="edit_button glyphicon glyphicon-pencil"></span>';
-							echo '</button>';
-							echo '<button ' .
-									'id="del_' . $row['PLID'] . '" ' .
-									'type="button" ' .
-									'class="del_button btn btn-default" '.
-									'>';
-								echo '<span class="del_button glyphicon glyphicon-remove"></span>';
-							echo '</button>';
-						echo '</td>';
-					echo '</tr>';
-				}
 				?>
+				<tr>
+					<td><?php echo $row['PayLevel']; ?></td>
+						<td><?php echo $row['JobCode']; ?></td>
+						<td><?php echo $row['JobTitle']; ?></td>
+						<td><?php echo '$' . number_format($row['MinSal'], 2, '.', ','); ?></td>
+						<td><?php echo '$' . number_format($row['MedSal'], 2, '.', ','); ?></td>
+						<td><?php echo '$' . number_format($row['MaxSal'], 2, '.', ','); ?></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+							<input
+								type="text"
+								name="bench<?php echo ++$benchID; ?>"
+								id="bench<?php echo $benchID; ?>">
+						</td>
+						<td><?php echo $row['FLSA']; ?></td>
+						<td><?php echo $row['UnionCode']; ?></td>
+						<td><?php echo $row['OldPayGrade']; ?></td>
+						<td><?php echo $row['JobFamily']; ?></td>
+						<td><?php echo $row['PayPlan']; ?></td>
+						<td><?php echo $row['Contract']; ?></td>
+						<td><?php echo $row['IPEDS_SOCs']; ?></td>			
+
+						<td class="center">
+							<button
+								id="edit_<?php echo $row['PLID']; ?>"
+								type="button"
+								class="edit_button btn btn-default confirm"
+								style="margin-right:4px;"
+								data-toggle="confirmation">
+								
+								<span class="edit_button glyphicon glyphicon-pencil"></span>
+							</button>
+							<button
+								id="del_<?php echo $row['PLID']; ?>"
+								type="button"
+								class="del_button btn btn-default">
+								
+								<span class="del_button glyphicon glyphicon-remove"></span>
+							</button>
+						</td>
+					</tr>
+				<?php } ?>
 			</form>
 		</tbody>
 	</table>
@@ -112,10 +109,5 @@
 
 
 
-
+<?php mysqli_close($conn); ?>
 		
-
-
-
-
-

@@ -54,6 +54,9 @@
 	}
 ?>	
 
+<!-- Overlay for modals -->
+<div id="overlay" style="display:none;"></div>
+
 <div class="container-fluid">
 
 	<br />
@@ -82,11 +85,10 @@
 		</thead>
 		<tbody>
 			<?php
-			$benchID = 0; // Incremental benchIDs
 			// For each row in query
 			while ($row = $sel_all_payLevels_res->fetch_assoc()){
 			?>
-			<tr>
+			<tr class="editable" onclick="rowClickHandler(event);">
 				<td><?php echo $row['PayLevel']; ?></td>
 					<td><?php echo $row['JobCode']; ?></td>
 					<td><?php echo $row['JobTitle']; ?></td>
@@ -97,11 +99,7 @@
 					<td><?php echo '$' . number_format($row['ActMedSal'], 2, '.', ','); ?></td>
 					<td><?php echo '$' . number_format($row['ActMaxSal'], 2, '.', ','); ?></td>
 					<td><?php /* Benchmark */ ?></td>
-					<td>
-						<?php 
-						echo convertFLSA($row['FLSA'], 'descr');
-						?>
-					</td>
+					<td><?php echo convertFLSA($row['FLSA'], 'descr');?></td>
 					<td><?php echo $row['UnionCode']; ?></td>
 					<td><?php echo $row['OldPayGrade']; ?></td>
 					<td><?php echo $row['JobFamily']; ?></td>
@@ -113,6 +111,89 @@
 		</tbody>
 	</table>
 </div>
+
+<!-- Edit Pay Level Form (absolutely positioned modal) -->
+<div
+	id="editPayLevel-cont"
+	class="modalForm">
+
+	<form
+		name="editPayLevel-form"
+		id="editPayLevel-form"
+		role="form"
+		method="post"
+		action="">
+
+		<table>
+			<tr>	
+				<td class="modalLabel">Pay Level</td>
+				<td id="payLevel-modalForm"></td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Job Code</td>
+				<td id="jobCode-modalForm"></td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Job Title</td>
+				<td id="jobTitle-modalForm"></td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Recommeded Min Salary</td>
+				<td>
+					<input
+						type="text"
+						name="recMinSal"
+						id="recMinSal-modalForm"
+						class="form-control">
+				</td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Recommeded Med Salary</td>
+				<td>
+					<input
+						type="text"
+						name="recMedSal"
+						id="recMedSal-modalForm"
+						class="form-control">
+				</td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Recommeded Max Salary</td>
+				<td>
+					<input
+						type="text"
+						name="recMaxSal"
+						id="recMaxSal-modalForm"
+						class="form-control">
+				</td>
+			</tr>
+			<tr>
+				<td class="modalLabel">Benchmark</td>
+				<td>
+					<input
+						type="text"
+						name="benchmark"
+						id="benchmark-modalForm"
+						class="form-control">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input
+						type="submit"
+						name="submitEdit"
+						id="submitEdit"
+						class="btn btn-md btn-primary"
+						value="Submit Changes">
+				</td>
+				<td></td>
+			</div>
+		</table>
+	</form>
+</div>
+
+
+
 
 <?php mysqli_close($conn); ?>
 		

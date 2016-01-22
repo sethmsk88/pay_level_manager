@@ -29,6 +29,7 @@ function rowClickHandler(e) {
 	$('#recMedSal-modalForm').val(val_array[4]);
 	$('#recMaxSal-modalForm').val(val_array[5]);
 	$('#benchmark-modalForm').val(val_array[9]);
+	$('#_jobCode-modalForm').val(val_array[1]);
 
 
 
@@ -41,7 +42,7 @@ function rowClickHandler(e) {
 	//$modal.width(400);
 
 	// Set position of modal to be at center of screen
-	var top = $target.offset().top;
+	var top = $target.offset().top / 2;
 	var left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
 	$modal.css({
 		"top": top,
@@ -79,4 +80,21 @@ $(document).ready(function(){
 			});
 		})
 	});
+
+	/* Attach onSubmit event handler to modal form */
+	$('#editPayLevel-form').on('submit', function(e) {
+		e.preventDefault();
+
+		/* AJAX request to update table entry */
+		$.ajax({
+			type: 'post',
+			url: './content/act_payLevel_edit.php',
+			data: $('#editPayLevel-form').serialize(),
+			success: function(response) {
+				// callback
+			}
+		});
+	});
+
+
 });

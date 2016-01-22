@@ -87,18 +87,54 @@
 			<?php
 			// For each row in query
 			while ($row = $sel_all_payLevels_res->fetch_assoc()){
+				
+				/* Initialize monetary variables */
+				$minSal = '';
+				$medSal = '';
+				$maxSal = '';
+				$actMinSal = '';
+				$actMedSal = '';
+				$actMaxSal = '';
+				$benchmark = '';
+
+				/*
+					If queried values are not null, populate monetary
+					variables with their respective formatted money string
+				*/
+				if (!is_null($row['MinSal']) && $row['MinSal'] > 0)
+					$minSal = '$' . number_format($row['MinSal'], 2, '.', ',');
+				
+				if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
+					$medSal = '$' . number_format($row['MedSal'], 2, '.', ',');
+				
+				if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
+					$maxSal = '$' . number_format($row['MaxSal'], 2, '.', ',');
+				
+				if (!is_null($row['ActMinSal']) && $row['ActMinSal'] > 0)
+					$actMinSal = '$' . number_format($row['ActMinSal'], 2, '.', ',');
+				
+				if (!is_null($row['ActMedSal']) && $row['ActMedSal'] > 0)
+					$actMedSal = '$' . number_format($row['ActMedSal'], 2, '.', ',');
+				
+				if (!is_null($row['ActMaxSal']) && $row['ActMaxSal'] > 0)
+					$actMaxSal = '$' . number_format($row['ActMaxSal'], 2, '.', ',');
+				
+				if (!is_null($row['Benchmark']) && $row['Benchmark'] > 0)
+					$benchmark = '$' . number_format($row['Benchmark'], 2, '.', ',');
+
 			?>
+
 			<tr class="editable" onclick="rowClickHandler(event);">
 				<td><?php echo $row['PayLevel']; ?></td>
 					<td><?php echo $row['JobCode']; ?></td>
 					<td><?php echo $row['JobTitle']; ?></td>
-					<td><?php echo '$' . number_format($row['MinSal'], 2, '.', ','); ?></td>
-					<td><?php echo '$' . number_format($row['MedSal'], 2, '.', ','); ?></td>
-					<td><?php echo '$' . number_format($row['MaxSal'], 2, '.', ','); ?></td>
-					<td><?php echo '$' . number_format($row['ActMinSal'], 2, '.', ','); ?></td>
-					<td><?php echo '$' . number_format($row['ActMedSal'], 2, '.', ','); ?></td>
-					<td><?php echo '$' . number_format($row['ActMaxSal'], 2, '.', ','); ?></td>
-					<td><?php /* Benchmark */ ?></td>
+					<td><?php echo $minSal; ?></td>
+					<td><?php echo $medSal ?></td>
+					<td><?php echo $maxSal; ?></td>
+					<td><?php echo $actMinSal; ?></td>
+					<td><?php echo $actMedSal; ?></td>
+					<td><?php echo $actMaxSal; ?></td>
+					<td><?php echo $benchmark; ?></td>
 					<td><?php echo convertFLSA($row['FLSA'], 'descr');?></td>
 					<td><?php echo $row['UnionCode']; ?></td>
 					<td><?php echo $row['OldPayGrade']; ?></td>
@@ -178,15 +214,21 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td colspan="2" style="text-align:center;">
+					<input
+						type="hidden"
+						name="_jobCode"
+						id="_jobCode-modalForm"
+						value="">
+
 					<input
 						type="submit"
 						name="submitEdit"
 						id="submitEdit"
 						class="btn btn-md btn-primary"
-						value="Submit Changes">
+						value="Submit Changes"
+						style="margin:1em 0 .5em 0;">
 				</td>
-				<td></td>
 			</div>
 		</table>
 	</form>

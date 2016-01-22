@@ -74,4 +74,17 @@ function convertFLSA($flsa, $format) {
 	}
 	return $convertedFLSA;
 }
+
+/**
+ *	Convert a string representation of money into a float
+ *	representation. Remove all characters except decimals
+ *	and integers.
+ *	
+ *	@param money 	String representation of money
+ *	@return Float representation of money
+ */
+function parseMoney($money) {
+	return preg_replace("/[^0-9.]/", "", $money);
+}
+
 ?>

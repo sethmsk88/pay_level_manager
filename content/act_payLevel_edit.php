@@ -1,4 +1,8 @@
 <?php
+	/* If no variables were posted, stop loading page */
+	if (count($_POST) == 0)
+		exit;
+	
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 	include_once '../includes/functions.php';
 
@@ -35,8 +39,6 @@
 		echo 'Execute failed: (' . $stmt->errno . ') ' . $stmt->error;
 		exit;
 	}
-
-	echo 'Rows affected: ' . $stmt->affected_rows;
 
 	$stmt->close();
 

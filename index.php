@@ -4,7 +4,7 @@
 	define("APP_NAME", "Pay Level Manager");
 	define("APP_PATH", "http://" . $_SERVER['HTTP_HOST'] . "./bootstrap/apps/login_system/");
 
-	include_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/dbInfo.php';
+	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
 ?>
 
 <!DOCTYPE html>

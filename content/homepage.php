@@ -1,6 +1,6 @@
 <?php
 	
-	include_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/db_connect.php';
+	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 	include_once './includes/functions.php';
 
 	/*

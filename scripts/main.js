@@ -91,10 +91,22 @@ $(document).ready(function(){
 			url: './content/act_payLevel_edit.php',
 			data: $('#editPayLevel-form').serialize(),
 			success: function(response) {
-				// callback
+				
+				/* Clear all fields in modal */
+				$('input[type="hidden"]').val('');
+				$('input[type="text"]').val('');
+				$('td.textField').text('');
+
+				/*
+					Hide each element with class="modal" that
+					is currently visible, then hide the overlay.
+				*/
+				$('.modalForm:visible').each(function() {
+					$(this).slideUp(function() {
+						$('#overlay').fadeOut();
+					});
+				})
 			}
 		});
 	});
-
-
 });

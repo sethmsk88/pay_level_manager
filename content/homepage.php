@@ -163,15 +163,15 @@
 		<table>
 			<tr>	
 				<td class="modalLabel">Pay Level</td>
-				<td id="payLevel-modalForm"></td>
+				<td id="payLevel-modalForm" class="textField"></td>
 			</tr>
 			<tr>
 				<td class="modalLabel">Job Code</td>
-				<td id="jobCode-modalForm"></td>
+				<td id="jobCode-modalForm" class="textField"></td>
 			</tr>
 			<tr>
 				<td class="modalLabel">Job Title</td>
-				<td id="jobTitle-modalForm"></td>
+				<td id="jobTitle-modalForm" class="textField"></td>
 			</tr>
 			<tr>
 				<td class="modalLabel">Recommeded Min Salary</td>

@@ -2,9 +2,7 @@
 	When a row in the table is clicked,
 	a modal is shown containing an edit form for that row.
 */
-function rowClickHandler(e) {
-//$('tr.editable').click(function() {
-	
+function rowClickHandler(e) {	
 	/*
 		Get reference to element that was clicked
 		IE sometimes uses srcElement instead of target
@@ -20,7 +18,6 @@ function rowClickHandler(e) {
 		val_array[i] = $val;
 	});
 
-
 	/* Populate fields in modal form */
 	$('#payLevel-modalForm').text(val_array[0]);
 	$('#jobCode-modalForm').text(val_array[1]);
@@ -30,8 +27,8 @@ function rowClickHandler(e) {
 	$('#recMaxSal-modalForm').val(val_array[5]);
 	$('#benchmark-modalForm').val(val_array[9]);
 	$('#_jobCode-modalForm').val(val_array[1]);
-
-
+	$('#_row_idx').val($targetRow[0].sectionRowIndex);
+	$('#_col_idx').val($target[0].cellIndex);
 
 	// Show overlay
 	$('#overlay').fadeIn();
@@ -57,8 +54,8 @@ function rowClickHandler(e) {
 
 $(document).ready(function(){
 
-	// Activate data table
-	$('#payLevels').DataTable({
+	// Activate datatable
+	var payLevel_dataTable = $('#payLevels').DataTable({
 		'order': [1, 'asc']
 	});
 
@@ -91,6 +88,29 @@ $(document).ready(function(){
 			url: './content/act_payLevel_edit.php',
 			data: $('#editPayLevel-form').serialize(),
 			success: function(response) {
+
+				// Select the cell that was clicked
+				var row_idx = $('#_row_idx').val();
+				var col_idx = $('#_col_idx').val();
+				var cell = payLevel_dataTable.cell(row_idx, col_idx);
+
+				/*console.log('row: ' + row_idx);
+				console.log('col: ' + col_idx);
+				console.log('cell data: ' + cell.data());*/
+
+				// Get values from each text input in the modal
+				// Populate respective cells in the table
+				$('#editPayLevel-form').find('input[type="text"]').each(function(idx, el) {
+
+					$el = $(el); // Convert to jQuery object
+
+					var cell = payLevel_dataTable.cell(row_idx, $el.attr('col-idx'));
+					cell.data($el.val());
+					//console.log(el.value);
+				});
+
+				// Redraw table
+				payLevel_dataTable.draw();
 				
 				/* Clear all fields in modal */
 				$('input[type="hidden"]').val('');

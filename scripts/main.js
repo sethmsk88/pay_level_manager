@@ -29,6 +29,10 @@ function rowClickHandler(e) {
 	$('#_jobCode-modalForm').val(val_array[1]);
 	$('#_row_idx').val($targetRow[0].sectionRowIndex);
 	$('#_col_idx').val($target[0].cellIndex);
+	$('#_actMed').val(val_array[7]);
+
+	/*console.log('r=' + $targetRow[0].sectionRowIndex);
+	console.log('c=' + $target[0].cellIndex);*/
 
 	// Show overlay
 	$('#overlay').fadeIn();
@@ -48,10 +52,67 @@ function rowClickHandler(e) {
 
 	// Show the new form
 	$modal.slideDown();
-
-
 }
 
+
+/**
+ * Update recommended salaries based on benchmark
+ */
+function updateRecSals(val_array) {
+	var recMin = parseMoney(val_array[3]);
+	var recMed = parseMoney(val_array[4]);
+	var recMax = parseMoney(val_array[5]);
+	var actMed = parseMoney(val_array[7]);
+	var benchmark = parseMoney(val_array[9]);
+
+	var newRecMin = benchmark * .8; // 80% of benchmark
+	var newRecMax = benchmark * 1.2; // 120% of benchmark
+	var newRecMed = recMed; // Default is old recommended median
+
+	if ((actMed < (benchmark * .9)) ||
+		(actMed > (benchmark * 1.1))) {
+		newRecMed = median(newRecMin, newRecMax);
+	}
+
+	/* AJAX request to update values in table */
+	$.ajax({
+		type: 'post',
+		url: './content/act_benchmark.php',
+		data: {
+			'newRecMin': newRecMin,
+			'newRecMax': newRecMax,
+			'newRecMed': newRecMed,
+			'jobCode': val_array['jobCode']
+		},
+		success: function(response) {
+			// Update fields in datatable
+			console.log("Success");
+		}
+	});
+	
+}
+
+
+/**
+ *	Calculate median of two numbers
+ *	
+ *	@param num1
+ *	@param num2
+ *	@return median number
+ */
+function median(num1, num2) {
+	
+	/* Swap numbers if num1 is largest */
+	if (num1 > num2) {
+		var tmp = num1;
+		num1 = num2;
+		num2 = tmp;
+	}
+	return num1 + (num2 - num1) / 2;
+}
+
+
+/* After page finishes loading */
 $(document).ready(function(){
 
 	// Activate datatable
@@ -93,10 +154,13 @@ $(document).ready(function(){
 				var row_idx = $('#_row_idx').val();
 				var col_idx = $('#_col_idx').val();
 				var cell = payLevel_dataTable.cell(row_idx, col_idx);
-
+				
 				/*console.log('row: ' + row_idx);
 				console.log('col: ' + col_idx);
 				console.log('cell data: ' + cell.data());*/
+
+				// Array for holding values from modal form
+				var modalFields_array = [];
 
 				// Get values from each text input in the modal
 				// Populate respective cells in the table
@@ -104,13 +168,24 @@ $(document).ready(function(){
 
 					$el = $(el); // Convert to jQuery object
 
+					// Add key value pair to array
+					modalFields_array[$el.attr('col-idx')] = $el.val();
+
+					// Update value in cell
 					var cell = payLevel_dataTable.cell(row_idx, $el.attr('col-idx'));
 					cell.data($el.val());
-					//console.log(el.value);
 				});
 
-				// Redraw table
-				payLevel_dataTable.draw();
+				/* Add actual median salary to array */
+				$actMed_field = $('#_actMed');
+				modalFields_array[$actMed_field.attr('col-idx')] = $actMed_field.val();
+
+				// Add job code to array
+				modalFields_array['jobCode'] = $('#_jobCode-modalForm').val();
+
+				updateRecSals(modalFields_array);
+
+
 				
 				/* Clear all fields in modal */
 				$('input[type="hidden"]').val('');

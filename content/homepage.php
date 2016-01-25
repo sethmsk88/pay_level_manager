@@ -101,13 +101,22 @@
 					If queried values are not null, populate monetary
 					variables with their respective formatted money string
 				*/
-				if (!is_null($row['MinSal']) && $row['MinSal'] > 0)
+				/* If adjusted rec min salary is not null, use it */
+				if (!is_null($row['MinSalAdjusted']))
+					$minSal = '$' . number_format($row['MinSalAdjusted'], 2, '.', ',');
+				else if (!is_null($row['MinSal']) && $row['MinSal'] > 0)
 					$minSal = '$' . number_format($row['MinSal'], 2, '.', ',');
 				
-				if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
+				/* If adjusted rec med salary is not null, use it */
+				if (!is_null($row['MedSalAdjusted']))
+					$medSal = '$' . number_format($row['MedSalAdjusted'], 2, '.', ',');
+				else if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
 					$medSal = '$' . number_format($row['MedSal'], 2, '.', ',');
 				
-				if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
+				/* If adjusted rec max salary is not null, use it */
+				if (!is_null($row['MaxSalAdjusted']))
+					$maxSal = '$' . number_format($row['MaxSalAdjusted'], 2, '.', ',');
+				else if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
 					$maxSal = '$' . number_format($row['MaxSal'], 2, '.', ',');
 				
 				if (!is_null($row['ActMinSal']) && $row['ActMinSal'] > 0)
@@ -236,6 +245,13 @@
 						name="_col_idx"
 						id="_col_idx"
 						value="">
+
+					<input
+						type="hidden"
+						name="_actMed"
+						id="_actMed"
+						value=""
+						col-idx="7">
 
 					<input
 						type="submit"

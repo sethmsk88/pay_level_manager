@@ -183,10 +183,12 @@ $(document).ready(function(){
 				// Add job code to array
 				modalFields_array['jobCode'] = $('#_jobCode-modalForm').val();
 
-				updateRecSals(modalFields_array);
-
-
+				var benchmark = parseMoney(modalFields_array[9]);
 				
+				/* If benchmark is not empty, update recommended salaries */
+				if (benchmark.length)
+					updateRecSals(modalFields_array);
+
 				/* Clear all fields in modal */
 				$('input[type="hidden"]').val('');
 				$('input[type="text"]').val('');

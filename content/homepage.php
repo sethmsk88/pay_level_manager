@@ -64,27 +64,29 @@
 	<table id="payLevels" class="table table-striped">
 		<thead>
 			<tr>
-				<th>Pay Level</th>
-				<th>Job Code</th>
-				<th>Job Title</th>
-				<th>Recommended<br />Min Salary</th>
-				<th>Recommended<br />Med Salary</th>
-				<th>Recommended<br />Max Salary</th>
-				<th>Actual Min Salary</th>
-				<th>Actual Med Salary</th>
-				<th>Actual Max Salary</th>
-				<th>Benchmark</th>
-				<th>FLSA</th>
-				<th>Union Code</th>
-				<th>Old Pay Grade</th>
-				<th>Job Family</th>
-				<th>Pay Plan</th>
-				<th>Contract</th>
-				<th>IPEDS SOCs</th>
+				<th id="col-0">Pay Level</th>
+				<th id="col-1">Job Code</th>
+				<th id="col-2">Job Title</th>
+				<th id="col-3">Recommended<br />Min Salary</th>
+				<th id="col-4">Recommended<br />Med Salary</th>
+				<th id="col-5">Recommended<br />Max Salary</th>
+				<th id="col-6">Actual Min Salary</th>
+				<th id="col-7">Actual Med Salary</th>
+				<th id="col-8">Actual Max Salary</th>
+				<th id="col-9">Benchmark</th>
+				<th id="col-10">FLSA</th>
+				<th id="col-11">Union Code</th>
+				<th id="col-12">Old Pay Grade</th>
+				<th id="col-13">Job Family</th>
+				<th id="col-14">Pay Plan</th>
+				<th id="col-15">Contract</th>
+				<th id="col-16">IPEDS SOCs</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
+			$row_idx = 0;
+
 			// For each row in query
 			while ($row = $sel_all_payLevels_res->fetch_assoc()){
 				
@@ -133,7 +135,11 @@
 
 			?>
 
-			<tr class="editable" onclick="rowClickHandler(event);">
+			<tr
+				id="row-<?php echo $row_idx; ?>"
+				class="editable"
+				onclick="rowClickHandler(event);">
+
 				<td><?php echo $row['PayLevel']; ?></td>
 					<td><?php echo $row['JobCode']; ?></td>
 					<td><?php echo $row['JobTitle']; ?></td>
@@ -152,7 +158,10 @@
 					<td><?php echo convertYesNo($row['Contract']); ?></td>
 					<td><?php echo $row['IPEDS_SOCs']; ?></td>			
 				</tr>
-			<?php } ?>
+			<?php
+				$row_idx++;
+			}
+			?>
 		</tbody>
 	</table>
 </div>

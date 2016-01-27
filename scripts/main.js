@@ -54,8 +54,6 @@ function rowClickHandler(e) {
  * Update recommended salaries based on benchmark
  */
 function updateRecSals(val_array) {
-	
-
 
 	var recMin = parseMoney(val_array[3]);
 	var recMed = parseMoney(val_array[4]);
@@ -63,31 +61,33 @@ function updateRecSals(val_array) {
 	var actMed = parseMoney(val_array[7]);
 	var $benchmark = $(parseMoney(val_array[9]));
 
-	var newRecMin = benchmark * .8; // 80% of benchmark
-	var newRecMax = benchmark * 1.2; // 120% of benchmark
-	var newRecMed = recMed; // Default is old recommended median
+	if ($benchmark.length) {
 
-	if ((actMed < (benchmark * .9)) ||
-		(actMed > (benchmark * 1.1))) {
-		newRecMed = median(newRecMin, newRecMax);
-	}
+		var newRecMin = $benchmark * .8; // 80% of benchmark
+		var newRecMax = $benchmark * 1.2; // 120% of benchmark
+		var newRecMed = recMed; // Default is old recommended median
 
-	/* AJAX request to update values in table */
-	$.ajax({
-		type: 'post',
-		url: './content/act_benchmark.php',
-		data: {
-			'newRecMin': newRecMin,
-			'newRecMax': newRecMax,
-			'newRecMed': newRecMed,
-			'jobCode': val_array['jobCode']
-		},
-		success: function(response) {
-			// Update fields in datatable
-			console.log("Success");
+		if ((actMed < ($benchmark * .9)) ||
+			(actMed > ($benchmark * 1.1))) {
+			newRecMed = median(newRecMin, newRecMax);
 		}
-	});
-	
+
+		/* AJAX request to update values in table */
+		$.ajax({
+			type: 'post',
+			url: './content/act_benchmark.php',
+			data: {
+				'newRecMin': newRecMin,
+				'newRecMax': newRecMax,
+				'newRecMed': newRecMed,
+				'jobCode': val_array['jobCode']
+			},
+			success: function(response) {
+				// Update fields in datatable
+				console.log("TODO: Update cells in datatable");
+			}
+		});
+	}
 }
 
 

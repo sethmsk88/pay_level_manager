@@ -198,8 +198,7 @@
 						type="text"
 						name="recMinSal"
 						id="recMinSal-modalForm"
-						class="form-control"
-						col-idx="3">
+						class="form-control">
 				</td>
 			</tr>
 			<tr>
@@ -209,8 +208,7 @@
 						type="text"
 						name="recMedSal"
 						id="recMedSal-modalForm"
-						class="form-control"
-						col-idx="4">
+						class="form-control">
 				</td>
 			</tr>
 			<tr>
@@ -220,8 +218,7 @@
 						type="text"
 						name="recMaxSal"
 						id="recMaxSal-modalForm"
-						class="form-control"
-						col-idx="5">
+						class="form-control">
 				</td>
 			</tr>
 			<tr>
@@ -231,8 +228,7 @@
 						type="text"
 						name="benchmark"
 						id="benchmark-modalForm"
-						class="form-control"
-						col-idx="9">
+						class="form-control">
 				</td>
 			</tr>
 			<tr>
@@ -251,16 +247,9 @@
 
 					<input
 						type="hidden"
-						name="_col_idx"
-						id="_col_idx"
-						value="">
-
-					<input
-						type="hidden"
 						name="_actMed"
 						id="_actMed"
-						value=""
-						col-idx="7">
+						value="">
 
 					<input
 						type="submit"

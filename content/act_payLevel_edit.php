@@ -65,9 +65,48 @@
 	$stmt->close();
 
 
+	$sel_payLevel_sql = "
+		SELECT *
+		FROM hrodt.pay_levels
+		WHERE JobCode = ? AND
+			Active = 1
+	";
 
+	if (!$stmt = $conn->prepare($sel_payLevel_sql)) {
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error;
+		exit;
+	}
+	else if (!$stmt->bind_param("s", $param_str_JobCode)) {
+		echo 'Binding parameters failed: (' . $stmt->errno . ') ' . $stmt->error;
+		exit;
+	}
+	else if (!$stmt->execute()) {
+		echo 'Execute failed: (' . $stmt->errno . ') ' . $stmt->error;
+		exit;
+	}
 
+	$payLevel_res = $stmt->get_result();
+	$payLevel_row = $payLevel_res->fetch_assoc();
+	$stmt->close();
 
+	/* Create associative array to hold updated values */
+	$returnValues = array();
+
+	if (is_null($payLevel_row['Benchmark']) ||
+		$payLevel_row['Benchmark'] == 0) {
+
+		$returnValues['recMinSal'] = $payLevel_row['MinSal'];
+		$returnValues['recMedSal'] = $payLevel_row['MedSal'];
+		$returnValues['recMaxSal'] = $payLevel_row['MaxSal'];
+	}
+	else {
+		$returnValues['recMinSal'] = $payLevel_row['MinSalAdjusted'];
+		$returnValues['recMedSal'] = $payLevel_row['MedSalAdjusted'];
+		$returnValues['recMaxSal'] = $payLevel_row['MaxSalAdjusted'];
+	}
+	$returnValues['benchmark'] = $payLevel_row['Benchmark'];
+
+	echo json_encode($returnValues);
 
 	mysqli_close($conn);
 ?>

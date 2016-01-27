@@ -146,9 +146,11 @@ $(document).ready(function(){
 				*/
 				$('.modalForm:visible').each(function() {
 					$(this).slideUp(function() {
-						$('#overlay').fadeOut();
+						$('#overlay').fadeOut(function() {
+							$('#row-' + row_idx).effect('highlight', 2000);
+						});
 					});
-				})
+				});
 			}
 		});
 	});

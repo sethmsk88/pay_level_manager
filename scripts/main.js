@@ -53,7 +53,7 @@ function rowClickHandler(e) {
 /**
  * Update recommended salaries based on benchmark
  */
-function updateRecSals(val_array) {
+/*function updateRecSals(val_array) {
 
 	var recMin = parseMoney(val_array[3]);
 	var recMed = parseMoney(val_array[4]);
@@ -72,7 +72,6 @@ function updateRecSals(val_array) {
 			newRecMed = median(newRecMin, newRecMax);
 		}
 
-		/* AJAX request to update values in table */
 		$.ajax({
 			type: 'post',
 			url: './content/act_benchmark.php',
@@ -88,7 +87,7 @@ function updateRecSals(val_array) {
 			}
 		});
 	}
-}
+}*/
 
 
 /**
@@ -165,6 +164,20 @@ $(document).ready(function(){
 				// Select the cell that was clicked
 				var row_idx = $('#_row_idx').val();
 				var col_idx = $('#_col_idx').val();
+
+
+
+				/***********************************************/
+				/***********************************************/
+				/***********************************************/
+
+				/*var testing = true;
+				if (!testing) {
+				
+				// Select the cell that was clicked
+				var row_idx = $('#_row_idx').val();
+				var col_idx = $('#_col_idx').val();
+				
 				var cell = payLevel_dataTable.cell(row_idx, col_idx);
 				
 				// Array for holding values from modal form
@@ -180,16 +193,18 @@ $(document).ready(function(){
 					modalFields_array[$el.attr('col-idx')] = $el.val();
 
 					setCell(row_idx, $el.attr('col-idx'), $el.val());
-				});
+				});*/
 
 				/* Add actual median salary to array */
-				$actMed_field = $('#_actMed');
+				/*$actMed_field = $('#_actMed');
 				modalFields_array[$actMed_field.attr('col-idx')] = $actMed_field.val();
 
 				// Add job code to array
 				modalFields_array['jobCode'] = $('#_jobCode-modalForm').val();
 				
-				updateRecSals(modalFields_array);
+				//updateRecSals(modalFields_array);
+
+				}*/
 
 				/* Clear all fields in modal */
 				$('input[type="hidden"]').val('');

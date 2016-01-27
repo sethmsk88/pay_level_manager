@@ -6,10 +6,33 @@
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 	include_once '../includes/functions.php';
 
-	$param_double_MinSalAdjusted = parseMoney($_POST['recMinSal']);
-	$param_double_MedSalAdjusted = parseMoney($_POST['recMedSal']);
-	$param_double_MaxSalAdjusted = parseMoney($_POST['recMaxSal']);
-	$param_double_Benchmark = parseMoney($_POST['benchmark']);
+	$actMedSal = parseMoney($_POST['_actMed']);
+	$recMinSal = parseMoney($_POST['recMinSal']);
+	$recMedSal = parseMoney($_POST['recMedSal']);
+	$recMaxSal = parseMoney($_POST['recMaxSal']);
+	$benchmark = parseMoney($_POST['benchmark']);
+
+	/* Calculate adjusted recommended salaries */
+	if ($benchmark > 0) {
+		$adjRecMinSal = 0.8 * $benchmark; // 80% of benchmark
+		$adjRecMedSal = $recMedSal;
+		$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark
+	}
+	else {
+		$adjRecMinSal = $recMinSal;
+		$adjRecMedSal = $recMedSal;
+		$adjRecMaxSal = $recMaxSal;
+	}
+
+	if (($actMedSal < ($benchmark * 0.9)) ||
+		($actMedSal > ($benchmark * 1.1))) {
+		$adjRecMedSal = $benchmark;
+	}
+
+	$param_double_MinSalAdjusted = $adjRecMinSal;
+	$param_double_MedSalAdjusted = $adjRecMedSal;
+	$param_double_MaxSalAdjusted = $adjRecMaxSal;
+	$param_double_Benchmark = $benchmark;
 	$param_str_JobCode = $_POST['_jobCode'];
 
 	$update_payLevel_sql = "
@@ -39,8 +62,11 @@
 		echo 'Execute failed: (' . $stmt->errno . ') ' . $stmt->error;
 		exit;
 	}
-
 	$stmt->close();
+
+
+
+
 
 
 	mysqli_close($conn);

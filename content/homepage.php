@@ -104,19 +104,19 @@
 					variables with their respective formatted money string
 				*/
 				/* If adjusted rec min salary is not null, use it */
-				if (!is_null($row['MinSalAdjusted']))
+				if (!is_null($row['MinSalAdjusted']) && $row['MinSalAdjusted'] > 0)
 					$minSal = '$' . number_format($row['MinSalAdjusted'], 2, '.', ',');
 				else if (!is_null($row['MinSal']) && $row['MinSal'] > 0)
 					$minSal = '$' . number_format($row['MinSal'], 2, '.', ',');
 				
 				/* If adjusted rec med salary is not null, use it */
-				if (!is_null($row['MedSalAdjusted']))
+				if (!is_null($row['MedSalAdjusted']) && $row['MedSalAdjusted'] > 0)
 					$medSal = '$' . number_format($row['MedSalAdjusted'], 2, '.', ',');
 				else if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
 					$medSal = '$' . number_format($row['MedSal'], 2, '.', ',');
 				
 				/* If adjusted rec max salary is not null, use it */
-				if (!is_null($row['MaxSalAdjusted']))
+				if (!is_null($row['MaxSalAdjusted']) && $row['MaxSalAdjusted'] > 0)
 					$maxSal = '$' . number_format($row['MaxSalAdjusted'], 2, '.', ',');
 				else if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
 					$maxSal = '$' . number_format($row['MaxSal'], 2, '.', ',');

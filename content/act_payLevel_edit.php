@@ -17,16 +17,16 @@
 		$adjRecMinSal = 0.8 * $benchmark; // 80% of benchmark
 		$adjRecMedSal = $recMedSal;
 		$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark
+
+		if (($actMedSal < ($benchmark * 0.9)) ||
+			($actMedSal > ($benchmark * 1.1))) {
+			$adjRecMedSal = $benchmark;
+		}
 	}
 	else {
 		$adjRecMinSal = $recMinSal;
 		$adjRecMedSal = $recMedSal;
 		$adjRecMaxSal = $recMaxSal;
-	}
-
-	if (($actMedSal < ($benchmark * 0.9)) ||
-		($actMedSal > ($benchmark * 1.1))) {
-		$adjRecMedSal = $benchmark;
 	}
 
 	$param_double_MinSalAdjusted = $adjRecMinSal;
@@ -94,6 +94,8 @@
 
 	if (is_null($payLevel_row['Benchmark']) ||
 		$payLevel_row['Benchmark'] == 0) {
+
+		echo var_dump($payLevel_row);
 
 		$returnValues['recMinSal'] = $payLevel_row['MinSal'];
 		$returnValues['recMedSal'] = $payLevel_row['MedSal'];

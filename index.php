@@ -78,7 +78,7 @@
                 <!-- Nav links -->
                 <ul class="nav navbar-nav">
                     <li id="homepage-link">
-                        <?php echo '<a id="navLink-login" href="./?page=login">Homepage</a>'; ?>
+                        <?php echo '<a id="navLink-login" href="./?page=homepage">Homepage</a>'; ?>
                     </li>
                 </ul>
             </div>

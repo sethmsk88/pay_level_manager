@@ -9,7 +9,7 @@
 		in the all_active_fac_staff table
 	*/
 	$sel_all_payLevels_sql = "
-		SELECT p.*, c.*
+		SELECT p.*, c.*, j.JobFamily_long
 		FROM hrodt.pay_levels p
 		JOIN (
 			SELECT JobCode,
@@ -45,6 +45,8 @@
 		GROUP BY JobCode
 		) AS c
 		ON p.JobCode = c.JobCode
+		JOIN hrodt.job_families j
+		ON p.JobFamily = j.JobFamily_short
 		ORDER BY p.JobCode ASC, p.PayLevel
 	";
 
@@ -153,7 +155,7 @@
 					<td><?php echo convertFLSA($row['FLSA'], 'descr');?></td>
 					<td><?php echo $row['UnionCode']; ?></td>
 					<td><?php echo $row['OldPayGrade']; ?></td>
-					<td><?php echo $row['JobFamily']; ?></td>
+					<td><?php echo $row['JobFamily_long']; ?></td>
 					<td><?php echo $row['PayPlan']; ?></td>
 					<td><?php echo convertYesNo($row['Contract']); ?></td>
 					<td><?php echo $row['IPEDS_SOCs']; ?></td>			

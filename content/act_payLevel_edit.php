@@ -14,19 +14,22 @@
 
 	/* Calculate adjusted recommended salaries */
 	if ($benchmark > 0) {
-		$adjRecMinSal = 0.8 * $benchmark; // 80% of benchmark
-		$adjRecMedSal = $recMedSal;
-		$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark
-
 		if (($actMedSal < ($benchmark * 0.9)) ||
 			($actMedSal > ($benchmark * 1.1))) {
+			$adjRecMinSal = 0.8 * $benchmark; // 80% of benchmark
 			$adjRecMedSal = $benchmark;
+			$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark*/
+		}
+		else {
+			$adjRecMinSal = $recMedSal * 0.8;
+			$adjRecMedSal = $recMedSal;
+			$adjRecMaxSal = $recMedSal * 1.1;
 		}
 	}
 	else {
-		$adjRecMinSal = $recMinSal;
+		$adjRecMinSal = $recMedSal * 0.8;
 		$adjRecMedSal = $recMedSal;
-		$adjRecMaxSal = $recMaxSal;
+		$adjRecMaxSal = $recMedSal * 1.1;
 	}
 
 	$param_double_MinSalAdjusted = $adjRecMinSal;

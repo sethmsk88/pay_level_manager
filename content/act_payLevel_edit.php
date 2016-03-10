@@ -17,19 +17,19 @@
 		if (($actMedSal < ($benchmark * 0.9)) ||
 			($actMedSal > ($benchmark * 1.1))) {
 			$adjRecMinSal = 0.8 * $benchmark; // 80% of benchmark
-			$adjRecMedSal = $benchmark;
+			$adjRecMedSal = $benchmark;       // 100% of benchmark
 			$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark*/
 		}
 		else {
-			$adjRecMinSal = $recMedSal * 0.8;
-			$adjRecMedSal = $recMedSal;
-			$adjRecMaxSal = $recMedSal * 1.1;
+			$adjRecMinSal = $recMedSal * 0.8; // 80% of recommended median
+			$adjRecMedSal = $recMedSal;       // 100% of recommended median
+			$adjRecMaxSal = $recMedSal * 1.2; // 120% of recommended median
 		}
 	}
 	else {
 		$adjRecMinSal = $recMedSal * 0.8;
 		$adjRecMedSal = $recMedSal;
-		$adjRecMaxSal = $recMedSal * 1.1;
+		$adjRecMaxSal = $recMedSal * 1.2;
 	}
 
 	$param_double_MinSalAdjusted = $adjRecMinSal;

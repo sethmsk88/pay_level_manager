@@ -1,3 +1,13 @@
+/**
+ *	Center the calling element on the screen
+ */
+jQuery.fn.center = function() {
+	this.css("position", "absolute");
+	this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + $(window).scrollTop()) + "px");
+	this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+	return this;
+}
+
 /*
 	When a row in the table is clicked,
 	a modal is shown containing an edit form for that row.
@@ -37,12 +47,7 @@ function rowClickHandler(e) {
 	$modal = $('#editPayLevel-cont');
 
 	// Set position of modal to be at center of screen
-	var top = $target.offset().top / 2;
-	var left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
-	$modal.css({
-		"top": top,
-		"left": left
-	});
+	$modal.center();
 
 	// Show the new form
 	$modal.slideDown();

@@ -98,8 +98,6 @@
 	if (is_null($payLevel_row['Benchmark']) ||
 		$payLevel_row['Benchmark'] == 0) {
 
-		echo var_dump($payLevel_row);
-
 		$returnValues['recMinSal'] = $payLevel_row['MinSal'];
 		$returnValues['recMedSal'] = $payLevel_row['MedSal'];
 		$returnValues['recMaxSal'] = $payLevel_row['MaxSal'];

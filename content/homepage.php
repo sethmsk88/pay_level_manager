@@ -138,27 +138,27 @@
 			?>
 
 			<tr
-				id="row-<?php echo $row_idx; ?>"
+				id="row-<?= $row_idx ?>"
 				class="editable"
 				onclick="rowClickHandler(event);">
 
-				<td><?php echo $row['PayLevel']; ?></td>
-					<td><?php echo $row['JobCode']; ?></td>
-					<td><?php echo $row['JobTitle']; ?></td>
-					<td><?php echo $minSal; ?></td>
-					<td><?php echo $medSal ?></td>
-					<td><?php echo $maxSal; ?></td>
-					<td><?php echo $actMinSal; ?></td>
-					<td><?php echo $actMedSal; ?></td>
-					<td><?php echo $actMaxSal; ?></td>
-					<td><?php echo $benchmark; ?></td>
-					<td><?php echo convertFLSA($row['FLSA'], 'descr');?></td>
-					<td><?php echo $row['UnionCode']; ?></td>
-					<td><?php echo $row['OldPayGrade']; ?></td>
-					<td><?php echo $row['JobFamily_long']; ?></td>
-					<td><?php echo $row['PayPlan']; ?></td>
-					<td><?php echo convertYesNo($row['Contract']); ?></td>
-					<td><?php echo $row['IPEDS_SOCs']; ?></td>			
+				<td><?= $row['PayLevel'] ?></td>
+					<td><?= $row['JobCode'] ?></td>
+					<td><?= $row['JobTitle'] ?></td>
+					<td><?= $minSal ?></td>
+					<td><?= $medSal ?></td>
+					<td><?= $maxSal ?></td>
+					<td><?= $actMinSal ?></td>
+					<td><?= $actMedSal ?></td>
+					<td><?= $actMaxSal ?></td>
+					<td><?= $benchmark ?></td>
+					<td><?= convertFLSA($row['FLSA'], 'descr');?></td>
+					<td><?= $row['UnionCode'] ?></td>
+					<td><?= $row['OldPayGrade'] ?></td>
+					<td><?= $row['JobFamily_long'] ?></td>
+					<td><?= $row['PayPlan'] ?></td>
+					<td><?= convertYesNo($row['Contract']) ?></td>
+					<td><?= $row['IPEDS_SOCs'] ?></td>			
 				</tr>
 			<?php
 				$row_idx++;
@@ -265,9 +265,4 @@
 		</table>
 	</form>
 </div>
-
-
-
-
-<?php mysqli_close($conn); ?>
 		

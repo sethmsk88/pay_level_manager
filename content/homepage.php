@@ -9,9 +9,9 @@
 		in the all_active_fac_staff table
 	*/
 	$sel_all_payLevels_sql = "
-		SELECT p.*, c.*, j.JobFamily_long
+		SELECT p.*, c.ActMinSal, c.ActMedSal, c.ActMaxSal, j.JobFamily_long
 		FROM hrodt.pay_levels p
-		JOIN (
+		LEFT JOIN (
 			SELECT JobCode,
 				MIN(a.Annual_Rt) AS ActMinSal,
 				(SUBSTRING_INDEX(		-- left median: max value in lower half
@@ -41,11 +41,11 @@
 			) /2
 			AS ActMedSal,
 			MAX(a.Annual_Rt) AS ActMaxSal
-		FROM hrodt.all_active_fac_staff a
-		GROUP BY JobCode
+			FROM hrodt.all_active_fac_staff a
+			GROUP BY JobCode
 		) AS c
 		ON p.JobCode = c.JobCode
-		JOIN hrodt.job_families j
+		LEFT JOIN hrodt.job_families j
 		ON p.JobFamily = j.JobFamily_short
 		ORDER BY p.JobCode ASC, p.PayLevel
 	";

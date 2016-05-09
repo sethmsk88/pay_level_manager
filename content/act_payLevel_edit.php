@@ -21,15 +21,15 @@
 			$adjRecMaxSal = 1.2 * $benchmark; // 120% of benchmark*/
 		}
 		else {
-			$adjRecMinSal = $recMedSal * 0.8; // 80% of recommended median
-			$adjRecMedSal = $recMedSal;       // 100% of recommended median
-			$adjRecMaxSal = $recMedSal * 1.2; // 120% of recommended median
+			$adjRecMinSal = $actMedSal * 0.8; // 80% of actual median
+			$adjRecMedSal = $actMedSal;       // 100% of actual median
+			$adjRecMaxSal = $actMedSal * 1.2; // 120% of actual median
 		}
 	}
 	else {
-		$adjRecMinSal = $recMedSal * 0.8;
-		$adjRecMedSal = $recMedSal;
-		$adjRecMaxSal = $recMedSal * 1.2;
+		$adjRecMinSal = $actMedSal * 0.8; // 80% of actual median
+		$adjRecMedSal = $actMedSal;       // 100% of actual median
+		$adjRecMaxSal = $actMedSal * 1.2; // 120% of actual median
 	}
 
 	$param_double_MinSalAdjusted = $adjRecMinSal;

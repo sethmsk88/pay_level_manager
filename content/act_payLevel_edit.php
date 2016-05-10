@@ -107,9 +107,21 @@
 	if (is_null($payLevel_row['Benchmark']) ||
 		$payLevel_row['Benchmark'] == 0) {
 
-		$returnValues['recMinSal'] = $payLevel_row['MinSal'];
-		$returnValues['recMedSal'] = $payLevel_row['MedSal'];
-		$returnValues['recMaxSal'] = $payLevel_row['MaxSal'];
+		// if adjusted salaries are not null, use them instead
+		if (!is_null($payLevel_row['MinSalAdjusted']))
+			$returnValues['recMinSal'] = $payLevel_row['MinSalAdjusted'];
+		else
+			$returnValues['recMinSal'] = $payLevel_row['MinSal'];
+
+		if (!is_null($payLevel_row['MedSalAdjusted']))
+			$returnValues['recMedSal'] = $payLevel_row['MedSalAdjusted'];
+		else
+			$returnValues['recMedSal'] = $payLevel_row['MedSal'];
+
+		if (!is_null($payLevel_row['MaxSalAdjusted']))
+			$returnValues['recMaxSal'] = $payLevel_row['MaxSalAdjusted'];
+		else
+			$returnValues['recMaxSal'] = $payLevel_row['MaxSal'];
 	}
 	else {
 		$returnValues['recMinSal'] = $payLevel_row['MinSalAdjusted'];

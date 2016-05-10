@@ -9,16 +9,34 @@ tr.editable{
 .modalForm{
 	border:1px solid #AAAAAA;
 	border-radius:5px;
-	padding:10px 10px 8px 10px;
 	background-color:#EFEFEF;
-	line-height:3em;
 	position:absolute;
 	display:none;
 	z-index:1001;
 }
 
+.modalForm-content{
+	padding:10px 10px 8px 10px;
+	line-height:3em;
+}
+
+.modalForm-header{
+	background-color:#C54C20;
+	border-top-left-radius:2px;
+	border-top-radius:2px;
+	padding:2px 10px;
+}
+
 .modalForm > .form-group{
 	margin-bottom:0;
+}
+
+.popover{
+	min-width:500px;
+}
+
+.indent{
+	padding-left:1em;
 }
 
 #overlay{
@@ -30,7 +48,7 @@ tr.editable{
 	background-color:#000;
 	opacity:0.5;
 	filter:alpha(opacity=50); /* IE7 and earlier */
-	z-index:2;
+	z-index:1000;
 }
 
 .modalLabel{

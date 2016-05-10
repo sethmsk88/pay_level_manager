@@ -32,6 +32,15 @@
 		$adjRecMaxSal = $actMedSal * 1.2; // 120% of actual median
 	}
 
+	// Do not allow min recommended salary to fall below minimum wage
+	$minimumWageSal = 16744;
+	if ($adjRecMinSal < $minimumWageSal) {
+		echo json_encode(array("error"=>"minWage",
+			"minWage"=>$minimumWageSal,
+			"jobCode"=>$_POST['_jobCode']));
+		exit;
+	}
+
 	$param_double_MinSalAdjusted = $adjRecMinSal;
 	$param_double_MedSalAdjusted = $adjRecMedSal;
 	$param_double_MaxSalAdjusted = $adjRecMaxSal;

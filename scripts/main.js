@@ -1,3 +1,18 @@
+function showModal(modalID) {
+	// Show overlay
+	$('#overlay').fadeIn();
+
+	$modal = $('#' + modalID);
+
+	// Set position of modal to be at center of screen
+	$modal.center();
+
+	// Show the new form
+	$modal.slideDown();
+
+	console.log(modalID);
+}
+
 /**
  *	Center the calling element on the screen
  */
@@ -41,6 +56,8 @@ function rowClickHandler(e) {
 	$('#_row_idx').val(row_idx);
 	$('#_actMed').val(val_array[7]);
 
+	showModal('editPayLevel-cont');
+/*
 	// Show overlay
 	$('#overlay').fadeIn();
 
@@ -50,7 +67,7 @@ function rowClickHandler(e) {
 	$modal.center();
 
 	// Show the new form
-	$modal.slideDown();
+	$modal.slideDown();*/
 }
 
 
@@ -87,7 +104,6 @@ function setCell(row, col, val) {
 	row.find('td').eq(col).text(val);
 }
 
-
 /* After page finishes loading */
 $(document).ready(function(){
 
@@ -95,6 +111,9 @@ $(document).ready(function(){
 	var payLevel_dataTable = $('#payLevels').DataTable({
 		'order': [1, 'asc']
 	});
+
+	// Activate popovers
+	$('[data-toggle="popover"]').popover();
 
 	/* Prepare overlay for modals */
 	$overlay = $('<div id="overlay"></div>');
@@ -130,17 +149,21 @@ $(document).ready(function(){
 				// Get index of clicked row
 				var row_idx = $('#_row_idx').val();
 
-				/* Update cells in table */
-				setCell(row_idx, 3, response['recMinSal'].formatMoney());
-				setCell(row_idx, 4, response['recMedSal'].formatMoney());
-				setCell(row_idx, 5, response['recMaxSal'].formatMoney());
+				// If no errors, update cells in datatable
+				if (response['error'] == undefined) {
+										
+					// Update cells in table
+					setCell(row_idx, 3, response['recMinSal'].formatMoney());
+					setCell(row_idx, 4, response['recMedSal'].formatMoney());
+					setCell(row_idx, 5, response['recMaxSal'].formatMoney());
 
-				if (response['benchmark'] > 0)
-					setCell(row_idx, 9, response['benchmark'].formatMoney());
-				else
-					setCell(row_idx, 9, ''); // Clear cell
+					if (response['benchmark'] > 0)
+						setCell(row_idx, 9, response['benchmark'].formatMoney());
+					else
+						setCell(row_idx, 9, ''); // Clear cell
+				}
 
-				/* Clear all fields in modal */
+				// Clear all fields in modal
 				$('input[type="hidden"]').val('');
 				$('input[type="text"]').val('');
 				$('td.textField').text('');
@@ -153,6 +176,17 @@ $(document).ready(function(){
 					$(this).slideUp(function() {
 						$('#overlay').fadeOut(function() {
 							$('#row-' + row_idx).effect('highlight', 2000);
+
+							if (response['error'] == "minWage") {
+
+								$minWageErrorText = $('#minWageError-cont .modalForm-content');
+
+								$minWageErrorText.html($minWageErrorText.html().replace('%minWage%', response['minWage'].formatMoney()));
+
+								$minWageErrorText.html($minWageErrorText.html().replace('%jobCode%', response['jobCode']));
+
+								showModal('minWageError-cont');
+							}
 						});
 					});
 				});

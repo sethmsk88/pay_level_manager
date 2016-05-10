@@ -168,101 +168,135 @@
 	</table>
 </div>
 
+
 <!-- Edit Pay Level Form (absolutely positioned modal) -->
 <div
 	id="editPayLevel-cont"
 	class="modalForm">
 
-	<form
-		name="editPayLevel-form"
-		id="editPayLevel-form"
-		role="form"
-		method="post"
-		action="">
+	<div class="modalForm-header">
+		Edit Pay Level
+		<a
+			href="#"
+			data-toggle="popover"
+			tabindex="1"
+			data-trigger="focus"
+			title="<b>Description of the calculations that are performed when the Edit Pay Level form is submitted</b>"
+			data-content="<b>If the Actual Median is between 90% and 110% of the Benchmark:</b><br />
+			<div class='indent'>Set the Recommended Min/Med/Max salaries to 80%/100%/120% of the Actual Med salary respectively.</div><br />
+			<b>Otherwise, if the case above is not true:</b><br />
+			<div class='indent'>Set Recommended Min/Med/Max salaries to 80%/100%/120% of Benchmark respectively.</div><br />
+			<b>Otherwise, if a Benchmark was not provided:</b><br />
+			<div class='indent'>Set the Recommended Min/Med/Max salaries to 80%/100%/120% of the Actual Med salary respectively.</div>"
+			data-placement="bottom"
+			data-html="true"
+			style="padding-left:6px;padding-right:6px;">
+			<span class="glyphicon glyphicon-info-sign" style="color:#00824A;"></span>
+		</a>
+	</div>
 
-		<table>
-			<tr>	
-				<td class="modalLabel">Pay Level</td>
-				<td id="payLevel-modalForm" class="textField"></td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Job Code</td>
-				<td id="jobCode-modalForm" class="textField"></td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Job Title</td>
-				<td id="jobTitle-modalForm" class="textField"></td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Recommeded Min Salary</td>
-				<td>
-					<input
-						type="text"
-						name="recMinSal"
-						id="recMinSal-modalForm"
-						class="form-control">
-				</td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Recommeded Med Salary</td>
-				<td>
-					<input
-						type="text"
-						name="recMedSal"
-						id="recMedSal-modalForm"
-						class="form-control">
-				</td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Recommeded Max Salary</td>
-				<td>
-					<input
-						type="text"
-						name="recMaxSal"
-						id="recMaxSal-modalForm"
-						class="form-control">
-				</td>
-			</tr>
-			<tr>
-				<td class="modalLabel">Benchmark</td>
-				<td>
-					<input
-						type="text"
-						name="benchmark"
-						id="benchmark-modalForm"
-						class="form-control">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" style="text-align:center;">
-					<input
-						type="hidden"
-						name="_jobCode"
-						id="_jobCode-modalForm"
-						value="">
+	<div class="modalForm-content">
 
-					<input
-						type="hidden"
-						name="_row_idx"
-						id="_row_idx"
-						value="">
+		<form
+			name="editPayLevel-form"
+			id="editPayLevel-form"
+			role="form"
+			method="post"
+			action="">
 
-					<input
-						type="hidden"
-						name="_actMed"
-						id="_actMed"
-						value="">
+			<table>
+				<tr>	
+					<td class="modalLabel">Pay Level</td>
+					<td id="payLevel-modalForm" class="textField"></td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Job Code</td>
+					<td id="jobCode-modalForm" class="textField"></td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Job Title</td>
+					<td id="jobTitle-modalForm" class="textField"></td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Recommended Min Salary</td>
+					<td>
+						<input
+							type="text"
+							name="recMinSal"
+							id="recMinSal-modalForm"
+							class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Recommended Med Salary</td>
+					<td>
+						<input
+							type="text"
+							name="recMedSal"
+							id="recMedSal-modalForm"
+							class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Recommended Max Salary</td>
+					<td>
+						<input
+							type="text"
+							name="recMaxSal"
+							id="recMaxSal-modalForm"
+							class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td class="modalLabel">Benchmark</td>
+					<td>
+						<input
+							type="text"
+							name="benchmark"
+							id="benchmark-modalForm"
+							class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="text-align:center;">
+						<input
+							type="hidden"
+							name="_jobCode"
+							id="_jobCode-modalForm"
+							value="">
 
-					<input
-						type="submit"
-						name="submitEdit"
-						id="submitEdit"
-						class="btn btn-md btn-primary"
-						value="Submit Changes"
-						style="margin:1em 0 .5em 0;">
-				</td>
-			</div>
-		</table>
-	</form>
+						<input
+							type="hidden"
+							name="_row_idx"
+							id="_row_idx"
+							value="">
+
+						<input
+							type="hidden"
+							name="_actMed"
+							id="_actMed"
+							value="">
+
+						<input
+							type="submit"
+							name="submitEdit"
+							id="submitEdit"
+							class="btn btn-md btn-primary"
+							value="Submit Changes"
+							style="margin:1em 0 .5em 0;">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </div>
-		
+
+<div id="minWageError-cont" class="modalForm">
+	<div class="modalForm-header">
+		<span class="glyphicon glyphicon-exclamation-sign" style="font-size:1.3em; padding-right:6px;"></span><b>Minimum Wage Error</b>
+	</div>
+	<div class="modalForm-content">
+		</span>Error! Job Code <b>%jobCode%</b> was NOT updated!<br />
+		Minimum Recommended Salary Must Not Fall Below Minimum Wage (<span class="text-danger">%minWage%</span>)
+	</div>
+</div>

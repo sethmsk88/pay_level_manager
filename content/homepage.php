@@ -77,12 +77,12 @@
 				<th id="col-8">Actual Max Salary</th>
 				<th id="col-9">Benchmark</th>
 				<th id="col-10">FLSA</th>
-				<th id="col-11">Union Code</th>
-				<th id="col-12">Old Pay Grade</th>
-				<th id="col-13">Job Family</th>
-				<th id="col-14">Pay Plan</th>
-				<th id="col-15">Contract</th>
-				<th id="col-16">IPEDS SOCs</th>
+				<th id="col-12">Union Code</th>
+				<th id="col-13">Old Pay Grade</th>
+				<th id="col-14">Job Family</th>
+				<th id="col-15">Pay Plan</th>
+				<th id="col-16">Contract</th>
+				<th id="col-17">IPEDS SOCs</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -152,7 +152,8 @@
 					<td><?= $actMedSal ?></td>
 					<td><?= $actMaxSal ?></td>
 					<td><?= $benchmark ?></td>
-					<td><?= convertFLSA($row['FLSA'], 'descr');?></td>
+					<!-- <td><?= convertFLSA($row['FLSA'], 'descr') ?></td> -->
+					<td><?= getFLSA($conn, $row['JobCode'], $row['PayPlan'], $row['FLSA']) ?></td>
 					<td><?= $row['UnionCode'] ?></td>
 					<td><?= $row['OldPayGrade'] ?></td>
 					<td><?= $row['JobFamily_long'] ?></td>

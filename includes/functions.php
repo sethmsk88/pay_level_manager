@@ -75,6 +75,81 @@ function convertFLSA($flsa, $format) {
 	return $convertedFLSA;
 }
 
+// Is position A&P?
+// Are there emps in this position that are under threshold?
+	// flsa_string .= "NE"
+// Are there emps in this position that are over threshold?
+	// If flsa_string != ""
+		// flsa_string .= "/"
+	// flsa_string .= "E"
+
+function getFLSA(&$conn, $jobCode, $payPlan, $flsa_status) {
+	
+	// If pay plan is A&P, do the calculations below, otherwise just return the FLSA status
+	if ($payPlan == "A&P") {
+
+		// select the most recent threshold
+		$sel_threshold_sql = "
+			SELECT threshold
+			FROM hrodt.flsa_threshold
+			ORDER BY dateUpdated DESC
+			LIMIT 1
+		";
+		if (!$stmt = $conn->prepare($sel_threshold_sql)) {
+			echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error;
+		} else if (!$stmt->execute()) {
+			echo 'Execute failed: (' . $stmt->errno . ') ' . $stmt->error;
+		}
+		$stmt->bind_result($threshold);
+		$stmt->fetch();
+		$stmt->close();
+
+		// select all salaries for employees in this position
+		$sel_salaries_sql = "
+			SELECT Annual_Rt
+			FROM hrodt.all_active_fac_staff
+			WHERE JobCode = ?
+		";
+		if (!$stmt = $conn->prepare($sel_salaries_sql)) {
+			echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error;
+		} else if (!$stmt->bind_param('s', $jobCode)) {
+			echo 'Binding parameters failed: (' . $stmt->errno . ') ' . $stmt->error;	
+		} else if (!$stmt->execute()) {
+			echo 'Execute failed: (' . $stmt->errno . ') ' . $stmt->error;
+		}
+		$stmt->bind_result($salary);
+
+		// Test all salaries to see if they are above or below threshold
+		$flsa_exempt = false;
+		$flsa_nonexempt = false;
+		while ($stmt->fetch()) {
+			if ($salary < $threshold)
+				$flsa_nonexempt = true;
+			else
+				$flsa_exempt = true;
+		}
+
+		// Create FLSA status string
+		$new_flsa_status = "";
+		if ($flsa_exempt && $flsa_nonexempt) {
+			$new_flsa_status = "Both";
+		} else if ($flsa_exempt) {
+			$new_flsa_status = "Exempt";
+		} else if ($flsa_nonexempt) {
+			$new_flsa_status = "Non-exempt";
+		}
+
+		return $new_flsa_status;
+
+ 	} else {
+ 		// Return FLSA status
+ 		return convertFLSA($flsa_status, 'descr');
+ 	}
+}
+
+
+
+
 /**
  *	Convert a string representation of money into a float
  *	representation. Remove all characters except decimals

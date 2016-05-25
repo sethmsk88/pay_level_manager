@@ -60,3 +60,7 @@ tr.editable{
 table#payLevels > tbody > tr:hover{
 	background-color: rgba(255,136,0,.3);
 }
+
+table#payLevels > tbody > tr > td:nth-of-type(10){
+	background-color: rgba(255,136,0,.3);
+}

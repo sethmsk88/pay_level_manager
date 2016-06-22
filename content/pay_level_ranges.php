@@ -5,21 +5,50 @@
 	$sel_payLevel_descr = "
 		SELECT PayLevel, Descr
 		FROM hrodt.pay_levels_descr
-		WHERE PayLevel = 10
 	";
-
 	if (!$stmt = $conn->prepare($sel_payLevel_descr)){
 		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error;
 	} else{
 		$stmt->execute();
 		$stmt->store_result();
 		$stmt->bind_result($payLevel, $payLevel_descr);
-		$stmt->fetch();
 	}
 
-	// For each Pay Level, get lowest and highest OldPayGrade,
-	// then create string like "10 to 19", where 10 is lowest and
-	// 19 is highest
+	// Convert query results into associative array
+	$payLevels_descrs = array(); // payLevel => descr
+	while ($stmt->fetch()) {
+		$payLevels_descrs[$payLevel] = $payLevel_descr;
+	}
+
+	// Select highest and lowest OldPayGrade for each Pay Level
+	// and insert them into an array indexed by Pay Level
+	$sel_oldPayGrade_sql = "
+		SELECT MIN(CAST(OldPayGrade AS SIGNED)) AS OldPayGrade_Min,
+			MAX(CAST(OldPayGrade AS SIGNED)) AS OldPayGrade_Max
+		FROM hrodt.pay_levels
+		WHERE OldPayGrade IS NOT NULL AND
+			PayLevel = ?
+	";
+
+	if (!$stmt = $conn->prepare($sel_oldPayGrade_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$oldPayGrade_ranges = array(); // NOTE: $payLevel => array("min" => $minOldPayGrade, "max" => $maxOldPayGrade)
+		foreach ($payLevels_descrs as $payLevel => $descr) {
+			
+			$stmt->bind_param("i", $payLevel);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($minOldPayGrade, $maxOldPayGrade);
+			$stmt->fetch();
+
+			// Insert min and max OldPayGrades into array,
+			// indexed by payLevel
+			$oldPayGrade_ranges[$payLevel] = array();
+			$oldPayGrade_ranges[$payLevel]["min"] = $minOldPayGrade;
+			$oldPayGrade_ranges[$payLevel]["max"] = $maxOldPayGrade;
+		}
+	}
 
 	// $update_sql = "
 	// 	UPDATE hrodt.pay_levels
@@ -49,6 +78,10 @@
 		</tr>
 	</thead>
 	<tbody>
+		<?php
+			foreach ($payLevels_descrs as $payLevel => $descr) {
+		?>
+
 		<tr>
 			<td rowspan="3">Core Operational and Support Staff, Specialized &amp; Technical Operational and Support Staff, and Tradesworkers</td>
 			<td>USPS(23)</td>
@@ -58,11 +91,16 @@
 			<td></td>
 			<td></td>
 			<td></td>
-			<td></td>
+			<td>
+				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>
+			</td>
 			<td></td>
 			<td></td>
 			<td></td>
 		</tr>
+		<?php
+			}
+		?>
 	</tbody>
 </table>
 

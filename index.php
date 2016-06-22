@@ -80,7 +80,10 @@
                 <!-- Nav links -->
                 <ul class="nav navbar-nav">
                     <li id="homepage-link">
-                        <?php echo '<a id="navLink-login" href="./?page=homepage">Homepage</a>'; ?>
+                        <a id="navLink-login" href="./?page=homepage">Homepage</a>
+                    </li>
+                    <li>
+                        <a href="./?page=pay_level_ranges">Pay Level Ranges</a>
                     </li>
                 </ul>
             </div>

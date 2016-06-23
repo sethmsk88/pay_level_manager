@@ -1,6 +1,20 @@
 <?php
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 
+	// Array mapping pay levels with their respective pay plans
+	$payLevel_payPlans = array(
+		10 => 'USPS(23)',
+		11 => 'USPS(23)',
+		12 => 'USPS(23)',
+		13 => 'USPS(23)',
+		14 => 'USPS(23)',
+		15 => 'A&amp;P(21)',
+		16 => 'A&amp;P(21)',
+		17 => 'A&amp;P(21) EXC(24)',
+		18 => 'USPS(23)',
+		19 => 'A&amp;P(21)'
+	);
+
 	// Get pay level descriptions
 	$sel_payLevel_descr = "
 		SELECT PayLevel, Descr
@@ -15,7 +29,7 @@
 	}
 
 	// Convert query results into associative array
-	$payLevels_descrs = array(); // payLevel => descr
+	$payLevels_descrs = array(); // payLevel => array(descr, payPlan)
 	while ($stmt->fetch()) {
 		$payLevels_descrs[$payLevel] = $payLevel_descr;
 	}
@@ -60,7 +74,7 @@
 	
 ?>
 
-<table>
+<table class="table table-striped">
 	<thead>
 		<tr>
 			<th>Job Category</th>
@@ -79,24 +93,58 @@
 	</thead>
 	<tbody>
 		<?php
+			$jobCategories = array(
+				"Core Operational and Support Staff, Specialized &amp; Technical Operational and Support Staff, and Tradesworkers",
+				"Specialized Professional and Other Exempt/Non-exempt USPS*",
+				"Administrative Exempt, Professional, Managerial, Executive (*some non-exempt at position level)",
+				"Executive",
+				"Special Categories"
+			);
+
+			// Num of rows each Job Category should span
+			$jobCatRowSpan = array(3,1,3,1,2);
+
+			// Array mapping pay levels to their respective job categories
+			$payLevel_jobCatIndexes = array(
+				10 => 0,
+				11 => 0,
+				12 => 0,
+				13 => 1,
+				14 => 2,
+				15 => 2,
+				16 => 2,
+				17 => 3,
+				18 => 4,
+				19 => 4
+			);
+
+			$currentJobCatIndex = -1; // init to value smaller than smallest index
+
 			foreach ($payLevels_descrs as $payLevel => $descr) {
+
+				echo '<tr>';
+
+				// If this pay level belongs to a new job category, output job category
+				if ($currentJobCatIndex < $payLevel_jobCatIndexes[$payLevel]) {
+					$currentJobCatIndex = $payLevel_jobCatIndexes[$payLevel];
+
+					echo '<td rowspan="' . $jobCatRowSpan[$currentJobCatIndex] . '">' . $jobCategories[$currentJobCatIndex] . '</td>';
+				}
 		?>
 
-		<tr>
-			<td rowspan="3">Core Operational and Support Staff, Specialized &amp; Technical Operational and Support Staff, and Tradesworkers</td>
-			<td>USPS(23)</td>
-			<td><?= $payLevel_descr ?></td>
+			<td><?= $payLevel_payPlans[$payLevel] ?></td>
+			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>Min Sal</td>
+			<td>Max Sal</td>
+			<td>Med Sal</td>
+			<td>Salary Range</td>
 			<td>
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>
 			</td>
-			<td></td>
-			<td></td>
-			<td></td>
+			<td>Num Emps</td>
+			<td>% of Staff</td>
+			<td>Num Classifications</td>
 		</tr>
 		<?php
 			}

@@ -64,6 +64,70 @@
 		}
 	}
 
+	// Get Min/Med/Max Salaries for each pay level
+	$sel_minMedMaxSal_sql = "
+		SELECT c.PayLevel, MIN(c.MinSal) AS ActMinSal, (
+			SUBSTRING_INDEX(				/* left median: max value in lower half */
+				SUBSTRING_INDEX(
+					GROUP_CONCAT(			/* list all values in ascending order */
+						c.MedSal
+                		ORDER BY c.MedSal
+					),
+            		',',
+            		CEILING(COUNT(*)/2)		/* left half of the list */
+				),
+		        ',',
+		        -1							/* keep only the last value in the list */
+			) +
+		    SUBSTRING_INDEX(				/* right median: min value in upper half */
+				SUBSTRING_INDEX(
+					GROUP_CONCAT(			/* list all values in ascending order */
+						c.MedSal
+		                ORDER BY c.MedSal
+					),
+		            ',',
+		            -CEILING(COUNT(*)/2)	/* right half of the list */
+				),
+		        ',',
+		        1							/* keep only the first value in the list */
+			))/2
+			AS ActMedSal,
+			MAX(c.MaxSal) AS ActMaxSal
+		FROM (
+			SELECT a.PayLevel,
+				COALESCE(a.MinSalAdjusted, b.MinSal) AS MinSal,
+		        COALESCE(a.MedSalAdjusted, b.MedSal) AS MedSal,
+		        COALESCE(a.MaxSalAdjusted, b.MaxSal) AS MaxSal
+			FROM hrodt.pay_levels a
+			JOIN hrodt.pay_levels b
+				ON a.JobCode = b.JobCode
+		) AS c
+		WHERE c.MinSal IS NOT NULL
+			AND c.MedSal IS NOT NULL
+			AND c.MaxSal IS NOT NULL
+		GROUP BY c.PayLevel
+		HAVING c.PayLevel IS NOT NULL
+	";
+
+	if (!$stmt = $conn->prepare($sel_minMedMaxSal_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($payLevel, $actMinSal, $actMedSal, $actMaxSal);
+
+		// Convert query results into associative array
+		// payLevel => array("min"=>MinSal, "med"=>MedSal, "max"=>MaxSal)
+		$minMedMaxSals = array();
+		while ($stmt->fetch()) {
+			$minMedMaxSals[$payLevel] = array(
+				"min" => $actMinSal,
+				"med" => $actMedSal,
+				"max" => $actMaxSal
+			);
+		}
+	}
+
 	// $update_sql = "
 	// 	UPDATE hrodt.pay_levels
 	// 	SET OldPayGrade = '3,4,5'
@@ -135,9 +199,9 @@
 			<td><?= $payLevel_payPlans[$payLevel] ?></td>
 			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td>Min Sal</td>
-			<td>Max Sal</td>
-			<td>Med Sal</td>
+			<td><?= $minMedMaxSals[$payLevel]["min"] ?></td>
+			<td><?= $minMedMaxSals[$payLevel]["max"] ?></td>
+			<td><?= $minMedMaxSals[$payLevel]["med"] ?></td>
 			<td>Salary Range</td>
 			<td>
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>

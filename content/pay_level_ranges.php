@@ -199,9 +199,9 @@
 			<td><?= $payLevel_payPlans[$payLevel] ?></td>
 			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td><?= $minMedMaxSals[$payLevel]["min"] ?></td>
-			<td><?= $minMedMaxSals[$payLevel]["max"] ?></td>
-			<td><?= $minMedMaxSals[$payLevel]["med"] ?></td>
+			<td>$<?= number_format($minMedMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
+			<td>$<?= number_format($minMedMaxSals[$payLevel]["max"], 2, '.', ',') ?></td>
+			<td>$<?= number_format($minMedMaxSals[$payLevel]["med"], 2, '.', ',') ?></td>
 			<td>Salary Range</td>
 			<td>
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>

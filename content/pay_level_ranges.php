@@ -128,6 +128,33 @@
 		}
 	}
 
+	// Get the min and max salaries of the active employees in each pay level
+	$sel_salRangeMinMax_sql = "
+		SELECT p.PayLevel, MIN(e.Annual_Rt) AS MinSal, MAX(e.Annual_Rt) AS MaxSal
+		FROM hrodt.all_active_fac_staff e
+		JOIN hrodt.pay_levels p
+			ON e.JobCode = p.JobCode
+		WHERE p.PayLevel IS NOT NULL
+		GROUP BY p.PayLevel
+	";
+	if (!$stmt = $conn->prepare($sel_salRangeMinMax_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($payLevel, $minSal, $maxSal);
+
+		// Convert query results into associative array
+		// payLevel => array("min"=>MinSal, "max"=>MaxSal)
+		$salRangeMinMax_arr = array();
+		while ($stmt->fetch()) {
+			$salRangeMinMax_arr[$payLevel] = array(
+				"min" => $minSal,
+				"max" => $maxSal
+			);
+		}
+	}
+
 	// $update_sql = "
 	// 	UPDATE hrodt.pay_levels
 	// 	SET OldPayGrade = '3,4,5'
@@ -202,7 +229,13 @@
 			<td>$<?= number_format($minMedMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
 			<td>$<?= number_format($minMedMaxSals[$payLevel]["max"], 2, '.', ',') ?></td>
 			<td>$<?= number_format($minMedMaxSals[$payLevel]["med"], 2, '.', ',') ?></td>
-			<td>Salary Range</td>
+			<td>
+				<?php
+					// calculate percentage using
+					$salRangePercentage = $salRangeMinMax_arr[$payLevel]["max"] / $salRangeMinMax_arr[$payLevel]["min"] * 100;
+					echo number_format($salRangePercentage, 1, '.', ',') . '%';
+				?>
+			</td>
 			<td>
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>
 			</td>

@@ -155,6 +155,30 @@
 		}
 	}
 
+	// Get the number of employees in each pay level
+	$sel_numEmps_sql = "
+		SELECT p.PayLevel, COUNT(e.EmplID) AS NumEmps
+		FROM hrodt.all_active_fac_staff e
+		LEFT JOIN hrodt.pay_levels p
+			ON e.JobCode = p.JobCode
+		WHERE p.PayLevel IS NOT NULL
+		GROUP BY p.PayLevel
+	";
+	if (!$stmt = $conn->prepare($sel_numEmps_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($payLevel, $numEmps);
+
+		// Convert query results into associative array
+		// payLevel => numEmps
+		$numEmps_arr = array();
+		while ($stmt->fetch()) {
+			$numEmps_arr[$payLevel] = $numEmps;
+		}
+	}
+
 	// $update_sql = "
 	// 	UPDATE hrodt.pay_levels
 	// 	SET OldPayGrade = '3,4,5'
@@ -239,7 +263,7 @@
 			<td>
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>
 			</td>
-			<td>Num Emps</td>
+			<td><?= $numEmps_arr[$payLevel] ?></td>
 			<td>% of Staff</td>
 			<td>Num Classifications</td>
 		</tr>

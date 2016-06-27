@@ -239,7 +239,7 @@
 				if ($currentJobCatIndex < $payLevel_jobCatIndexes[$payLevel]) {
 					$currentJobCatIndex = $payLevel_jobCatIndexes[$payLevel];
 
-					echo '<td rowspan="' . $jobCatRowSpan[$currentJobCatIndex] . '">' . $jobCategories[$currentJobCatIndex] . '</td>';
+					echo '<td class="firstCol" rowspan="' . $jobCatRowSpan[$currentJobCatIndex] . '">' . $jobCategories[$currentJobCatIndex] . '</td>';
 				}
 		?>
 

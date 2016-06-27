@@ -1,3 +1,11 @@
+td.firstCol {
+	border-right: 1px solid #ddd;
+}
+
 td.highlight {
 	background-color: rgba(221,221,221,.4);
+}
+
+#payLevelRanges-table {
+	border-bottom: 2px solid #ddd;
 }

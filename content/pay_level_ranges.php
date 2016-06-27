@@ -124,6 +124,7 @@
 			ON e.JobCode = p.JobCode
 		WHERE p.PayLevel IS NOT NULL
 		GROUP BY p.PayLevel
+		ORDER BY p.PayLevel
 	";
 	if (!$stmt = $conn->prepare($sel_numEmps_sql)){
 		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
@@ -138,7 +139,25 @@
 		while ($stmt->fetch()) {
 			$numEmps_arr[$payLevel] = $numEmps;
 		}
-	}	
+	}
+
+	// Get the total number of staff
+	$sel_numStaff_sql = "
+		SELECT COUNT(e.EmplID) AS NumStaff
+		FROM hrodt.all_active_fac_staff e
+		JOIN hrodt.pay_levels p
+			ON e.JobCode = p.JobCode
+		WHERE p.PayLevel IS NOT NULL
+			AND (e.JobFamily = 'USPS' OR e.JobFamily = 'A&P')
+	";
+	if (!$stmt = $conn->prepare($sel_numStaff_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($numStaff);
+		$stmt->fetch();
+	}
 ?>
 
 <table class="table table-striped">
@@ -223,7 +242,12 @@
 				<?= $oldPayGrade_ranges[$payLevel]["min"] . ' to ' .  $oldPayGrade_ranges[$payLevel]["max"] ?>
 			</td>
 			<td><?= $numEmps_arr[$payLevel] ?></td>
-			<td>% of Staff</td>
+			<td>
+				<?php
+					$staffPercentage = ($numEmps_arr[$payLevel] / $numStaff) * 100;
+					echo number_format($staffPercentage, 1, '.', ',') . '%';
+				?>
+			</td>
 			<td>Num Classifications</td>
 		</tr>
 		<?php

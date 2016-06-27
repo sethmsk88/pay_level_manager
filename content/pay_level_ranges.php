@@ -158,6 +158,29 @@
 		$stmt->bind_result($numStaff);
 		$stmt->fetch();
 	}
+
+	// Get the number of classifications for each pay level
+	$sel_numClass_sql = "
+		SELECT PayLevel, COUNT(JobCode) AS NumClassifications
+		FROM hrodt.pay_levels
+		WHERE PayLevel IS NOT NULL
+		GROUP BY PayLevel
+		ORDER BY PayLevel
+	";
+	if (!$stmt = $conn->prepare($sel_numClass_sql)){
+		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
+	} else{
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($payLevel, $numClass);
+
+		// Convert query results into associative array
+		// payLevel => numClass
+		$numClass_arr = array();
+		while ($stmt->fetch()) {
+			$numClass_arr[$payLevel] = $numClass;
+		}
+	}
 ?>
 
 <table class="table table-striped">
@@ -248,7 +271,7 @@
 					echo number_format($staffPercentage, 1, '.', ',') . '%';
 				?>
 			</td>
-			<td>Num Classifications</td>
+			<td><?= $numClass_arr[$payLevel] ?></td>
 		</tr>
 		<?php
 			}

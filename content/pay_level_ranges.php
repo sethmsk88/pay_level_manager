@@ -201,8 +201,8 @@
 			<th>Med</th>
 			<th>Range % lowest to hightest paid EE in pay level</th>
 			<th>Old Pay Grade</th>
-			<th>Approx. # of Employees</th>
-			<th>% of Staff</th>
+			<th>Approximate<br /># of Employees</th>
+			<th>Approximate<br />% of USPS/A&amp;P Staff</th>
 			<th>Number of Classifications</th>
 		</tr>
 	</thead>

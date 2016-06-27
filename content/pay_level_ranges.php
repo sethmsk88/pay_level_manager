@@ -64,66 +64,27 @@
 		}
 	}
 
-	// Get Min/Med/Max Salaries for each pay level
-	$sel_minMedMaxSal_sql = "
-		SELECT c.PayLevel, MIN(c.MinSal) AS ActMinSal, (
-			SUBSTRING_INDEX(				/* left median: max value in lower half */
-				SUBSTRING_INDEX(
-					GROUP_CONCAT(			/* list all values in ascending order */
-						c.MedSal
-                		ORDER BY c.MedSal
-					),
-            		',',
-            		CEILING(COUNT(*)/2)		/* left half of the list */
-				),
-		        ',',
-		        -1							/* keep only the last value in the list */
-			) +
-		    SUBSTRING_INDEX(				/* right median: min value in upper half */
-				SUBSTRING_INDEX(
-					GROUP_CONCAT(			/* list all values in ascending order */
-						c.MedSal
-		                ORDER BY c.MedSal
-					),
-		            ',',
-		            -CEILING(COUNT(*)/2)	/* right half of the list */
-				),
-		        ',',
-		        1							/* keep only the first value in the list */
-			))/2
-			AS ActMedSal,
-			MAX(c.MaxSal) AS ActMaxSal
-		FROM (
-			SELECT a.PayLevel,
-				COALESCE(a.MinSalAdjusted, b.MinSal) AS MinSal,
-		        COALESCE(a.MedSalAdjusted, b.MedSal) AS MedSal,
-		        COALESCE(a.MaxSalAdjusted, b.MaxSal) AS MaxSal
-			FROM hrodt.pay_levels a
-			JOIN hrodt.pay_levels b
-				ON a.JobCode = b.JobCode
-		) AS c
-		WHERE c.MinSal IS NOT NULL
-			AND c.MedSal IS NOT NULL
-			AND c.MaxSal IS NOT NULL
-		GROUP BY c.PayLevel
-		HAVING c.PayLevel IS NOT NULL
+	// Get Min/Mid/Max Salaries for each pay level
+	$sel_minMidMaxSal_sql = "
+		SELECT PayLevel, PayLevelMin, PayLevelMid, PayLevelMax
+		FROM hrodt.pay_levels_descr
 	";
 
-	if (!$stmt = $conn->prepare($sel_minMedMaxSal_sql)){
+	if (!$stmt = $conn->prepare($sel_minMidMaxSal_sql)){
 		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error . '<br />';
 	} else{
 		$stmt->execute();
 		$stmt->store_result();
-		$stmt->bind_result($payLevel, $actMinSal, $actMedSal, $actMaxSal);
+		$stmt->bind_result($payLevel, $plMinSal, $plMidSal, $plMaxSal);
 
 		// Convert query results into associative array
 		// payLevel => array("min"=>MinSal, "med"=>MedSal, "max"=>MaxSal)
-		$minMedMaxSals = array();
+		$minMidMaxSals = array();
 		while ($stmt->fetch()) {
-			$minMedMaxSals[$payLevel] = array(
-				"min" => $actMinSal,
-				"med" => $actMedSal,
-				"max" => $actMaxSal
+			$minMidMaxSals[$payLevel] = array(
+				"min" => $plMinSal,
+				"mid" => $plMidSal,
+				"max" => $plMaxSal
 			);
 		}
 	}
@@ -177,16 +138,7 @@
 		while ($stmt->fetch()) {
 			$numEmps_arr[$payLevel] = $numEmps;
 		}
-	}
-
-	// $update_sql = "
-	// 	UPDATE hrodt.pay_levels
-	// 	SET OldPayGrade = '3,4,5'
-	// 	WHERE OldPayGrade = '345'
-	// ";
-	// $stmt = $conn->prepare($update_sql);
-	// $stmt
-	
+	}	
 ?>
 
 <table class="table table-striped">
@@ -198,7 +150,7 @@
 			<th>Pay Level</th>
 			<th>Min</th>
 			<th>Max</th>
-			<th>Med</th>
+			<th>Mid</th>
 			<th>Range % lowest to hightest paid EE in pay level</th>
 			<th>Old Pay Grade</th>
 			<th>Approximate<br /># of Employees</th>
@@ -250,9 +202,16 @@
 			<td><?= $payLevel_payPlans[$payLevel] ?></td>
 			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td>$<?= number_format($minMedMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
-			<td>$<?= number_format($minMedMaxSals[$payLevel]["max"], 2, '.', ',') ?></td>
-			<td>$<?= number_format($minMedMaxSals[$payLevel]["med"], 2, '.', ',') ?></td>
+			<td>$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
+			<td>
+				<?php
+					if ($minMidMaxSals[$payLevel]["max"] == -1)
+						echo "No max";
+					else
+						echo number_format($minMidMaxSals[$payLevel]["max"], 2, '.', ',');
+				?>
+			</td>
+			<td>$<?= number_format($minMidMaxSals[$payLevel]["mid"], 2, '.', ',') ?></td>
 			<td>
 				<?php
 					// calculate percentage using

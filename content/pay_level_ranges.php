@@ -1,3 +1,5 @@
+<link href="./css/pay_level_ranges.css" rel="stylesheet" />
+
 <?php
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
 
@@ -183,7 +185,7 @@
 	}
 ?>
 
-<table class="table table-striped">
+<table id="payLevelRanges-table" class="table table-striped">
 	<thead>
 		<tr>
 			<th>Job Category</th>
@@ -244,8 +246,8 @@
 			<td><?= $payLevel_payPlans[$payLevel] ?></td>
 			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td>$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
-			<td>
+			<td class="highlight">$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
+			<td class="highlight">
 				<?php
 					if ($minMidMaxSals[$payLevel]["max"] == -1)
 						echo "No max";

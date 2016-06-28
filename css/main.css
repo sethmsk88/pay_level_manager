@@ -64,3 +64,8 @@ table#payLevels > tbody > tr:hover{
 table#payLevels > tbody > tr > td:nth-of-type(10){
 	background-color: rgba(255,136,0,.3);
 }
+
+table#payLevelRanges-table th:hover {
+	cursor: pointer;
+	background-color: rgba(255,136,0,.3);
+}

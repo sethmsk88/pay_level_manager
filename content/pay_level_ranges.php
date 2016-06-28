@@ -189,18 +189,91 @@
 <table id="payLevelRanges-table" class="table table-striped">
 	<thead>
 		<tr>
-			<th>Job Category</th>
-			<th>PayPlan</th>
-			<th>Level Description</th>
-			<th>Pay Level</th>
-			<th>Min</th>
-			<th>Max</th>
-			<th>Mid</th>
-			<th>Range % lowest to hightest paid EE in pay level</th>
-			<th>Old Pay Grade</th>
-			<th>Approximate<br /># of Employees</th>
-			<th>Approximate<br />% of USPS/A&amp;P Staff</th>
-			<th>Number of Classifications</th>
+			<th>
+				<div
+					data-toggle="popover"					
+					data-content="General description of work type"
+					data-placement="bottom">
+					Job Category
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="FAMU Pay Plans">
+					Pay Plan
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="General description of similar classifications that share a level of responsibility and expertise">
+					Level Description
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Pay level ranges are dollar parameters or markers where classifications with similar levels of general responsibility are equated with an approximate compensation value range. Placement of classifications within the pay level (high to low) can be affected by market value and value of skill type regardless of level of responsibility. Pay level 10 begins at the current Florida minimum wage. Each pay level range represents the absolute lowest and highest salary points of the classifications in the pay level for budget purposes and not used as salary ranges for individual classifications. Recommended salary ranges classification for hiring and for internal equity purpose are furnished by the Compensation and Classification Office of HR upon request.">
+					Pay Level
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Minimum of pay level - no classification in this pay level should be lower">
+					Min
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Maximum of pay level - no classification in this pay level should be higher">
+					Max
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Mid point of pay level - most classification ranges will fall around this number">
+					Mid
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Typically the percentage difference between the highest and lowest pay within the pay level">
+					Range % lowest to hightest paid EE in pay level
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Crosswalk to former BOR (1993-2006)paygrades used by FAMU last update 2015 with minimum wage">
+					Old Pay Grade
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Number of active positions">
+					Approximate<br /># of Employees
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Percentage of staff within the pay level">
+					Approximate<br />% of USPS/A&amp;P Staff
+				</div>
+			</th>
+			<th>
+				<div
+					data-toggle="popover"
+					data-content="Number of classifications in the pay level">
+					Number of Classifications
+				</div>
+			</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -253,8 +326,7 @@
 				<td class="highlight">
 					<div
 						data-toggle="popover"					
-						data-content="Minimum based on Florida Minimum Wage"
-						style=""> 
+						data-content="Minimum based on Florida Minimum Wage"> 
 						$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?>
 					</div>
 			<?php } else { ?>

@@ -107,14 +107,6 @@ function setCell(row, col, val) {
 /* After page finishes loading */
 $(document).ready(function(){
 
-	// Activate datatable
-	var payLevel_dataTable = $('#payLevels').DataTable({
-		'order': [1, 'asc']
-	});
-
-	// Activate popovers
-	$('[data-toggle="popover"]').popover();
-
 	/* Prepare overlay for modals */
 	$overlay = $('<div id="overlay"></div>');
 	$overlay.hide();

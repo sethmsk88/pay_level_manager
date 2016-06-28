@@ -1,4 +1,5 @@
 <link href="./css/pay_level_ranges.css" rel="stylesheet" />
+<script src="./scripts/pay_level_ranges.js"></script>
 
 <?php
 	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
@@ -246,7 +247,22 @@
 			<td><?= $payLevel_payPlans[$payLevel] ?></td>
 			<td><?= $descr ?></td>
 			<td><?= $payLevel ?></td>
-			<td class="highlight">$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?></td>
+
+			<!-- Show minimum wage explanation for Pay Level 10 -->
+			<?php if ($payLevel == 10) { ?>
+				<td class="highlight">
+					<div
+						data-toggle="popover"					
+						data-content="Minimum based on Florida Minimum Wage"
+						style=""> 
+						$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?>
+					</div>
+			<?php } else { ?>
+				<td class="highlight">
+					$<?= number_format($minMidMaxSals[$payLevel]["min"], 2, '.', ',') ?>
+			<?php } ?>
+			</td>
+
 			<td class="highlight">
 				<?php
 					if ($minMidMaxSals[$payLevel]["max"] == -1)

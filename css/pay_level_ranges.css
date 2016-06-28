@@ -9,3 +9,7 @@ td.highlight {
 #payLevelRanges-table {
 	border-bottom: 2px solid #ddd;
 }
+
+.popover {
+	max-width: 100px !important;
+}

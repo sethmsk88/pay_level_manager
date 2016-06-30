@@ -340,7 +340,7 @@
 					if ($minMidMaxSals[$payLevel]["max"] == -1)
 						echo "No max";
 					else
-						echo number_format($minMidMaxSals[$payLevel]["max"], 2, '.', ',');
+						echo '$' . number_format($minMidMaxSals[$payLevel]["max"], 2, '.', ',');
 				?>
 			</td>
 			<td>$<?= number_format($minMidMaxSals[$payLevel]["mid"], 2, '.', ',') ?></td>

@@ -347,7 +347,7 @@
 			<td>
 				<?php
 					// calculate percentage using
-					$salRangePercentage = $salRangeMinMax_arr[$payLevel]["max"] / $salRangeMinMax_arr[$payLevel]["min"] * 100;
+					$salRangePercentage = ($salRangeMinMax_arr[$payLevel]["max"] - $salRangeMinMax_arr[$payLevel]["min"]) / $salRangeMinMax_arr[$payLevel]["min"] * 100;
 					echo number_format($salRangePercentage, 1, '.', ',') . '%';
 				?>
 			</td>

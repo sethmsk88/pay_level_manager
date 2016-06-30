@@ -243,7 +243,7 @@
 				<div
 					data-toggle="popover"
 					data-content="Typically the percentage difference between the highest and lowest pay within the pay level">
-					Range % lowest to hightest paid EE in pay level
+					Range % lowest to hightest salary in pay level
 				</div>
 			</th>
 			<th>
@@ -347,8 +347,11 @@
 			<td>
 				<?php
 					// calculate percentage using
-					$salRangePercentage = ($salRangeMinMax_arr[$payLevel]["max"] - $salRangeMinMax_arr[$payLevel]["min"]) / $salRangeMinMax_arr[$payLevel]["min"] * 100;
-					echo number_format($salRangePercentage, 1, '.', ',') . '%';
+					$salRangePercentage = ($minMidMaxSals[$payLevel]["max"] - $minMidMaxSals[$payLevel]["min"]) / $minMidMaxSals[$payLevel]["min"] * 100;
+					
+					// If max salary is NOT the "No Max" value
+					if ($minMidMaxSals[$payLevel]["max"] > -1)
+						echo number_format($salRangePercentage, 1, '.', ',') . '%';
 				?>
 			</td>
 			<td>

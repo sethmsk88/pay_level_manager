@@ -141,7 +141,11 @@
 			<tr
 				id="row-<?= $row_idx ?>"
 				class="editable"
-				onclick="rowClickHandler(event);">
+				<?php if ($loggedIn) {
+					// Only include event handler for edit form if logged in
+					echo 'onclick="rowClickHandler(event);"';
+				} ?>
+				>
 
 				<td><?= $row['PayLevel'] ?></td>
 					<td><?= $row['JobCode'] ?></td>
@@ -172,6 +176,7 @@
 
 
 <!-- Edit Pay Level Form (absolutely positioned modal) -->
+<?php if ($loggedIn) { // BEGIN Must be logged in ?>
 <div
 	id="editPayLevel-cont"
 	class="modalForm">
@@ -292,6 +297,7 @@
 		</form>
 	</div>
 </div>
+<?php } // END Must be logged in ?>
 
 <div id="minWageError-cont" class="modalForm">
 	<div class="modalForm-header">

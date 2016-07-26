@@ -4,7 +4,15 @@
 	define("APP_NAME", "Pay Level Manager");
 	define("APP_PATH", "http://" . $_SERVER['HTTP_HOST'] . "./bootstrap/apps/login_system/");
 
-	include_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+    require_once "./includes/functions.php";
+
+    // Start session or regenerate session id
+    sec_session_start();
+
+    // Check to see if User is logged in
+    $loggedIn = login_check($conn);
 ?>
 
 <!DOCTYPE html>
@@ -48,8 +56,10 @@
 
     <!-- Included Scripts -->
     <script src="./scripts/main.js"></script>
+    <script src="./scripts/login.js"></script>
     <script src="/bootstrap/js/money_formatting.js"></script>
     <script src="/bootstrap/scripts/DataTables-1.10.7/media/js/jquery.datatables.js"></script>
+    <script src="/bootstrap/js/sha512.js"></script>
 
     <?php
     	// Include FAMU logo header
@@ -86,6 +96,33 @@
                         <a href="./?page=pay_level_ranges">Pay Level Ranges</a>
                     </li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <?php if ($loggedIn) { ?>
+                    <li class="dropdown" style="cursor:pointer;">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="glyphicon glyphicon-user" style="margin-right:8px;"></span><?php echo $_SESSION['firstName']; ?> <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:4px;"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a id="settings-link" href="?page=settings">Settings</a>
+                            </li>
+                            <li>
+                                <a id="logout-link" href="./content/act_logout.php"> Log out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <?php } else { ?>
+                    <li>
+                        <div class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Log in</a>
+                            <ul class="dropdown-menu" style="padding:0px;">
+                                <li>
+                                    <?php include_once './includes/inc_login_form.php'; ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <?php } ?>
+                </ul>
+
             </div>
         </div>
     </nav>

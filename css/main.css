@@ -69,3 +69,15 @@ table#payLevelRanges-table th:hover {
 	cursor: pointer;
 	background-color: rgba(255,136,0,.3);
 }
+
+/** CSS to make dropdown look correct in nav-bar **/
+.navbar-nav > li > .dropdown > a {
+	padding: 15px;
+	color: #fff;
+	display: block;
+}
+.nav .open > a, .nav .open > a:focus,
+.nav .open > a:hover {
+    background-color: #b1441d;
+    text-decoration: none;
+}

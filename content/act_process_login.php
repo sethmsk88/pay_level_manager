@@ -1,27 +1,26 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . 'bootstrap/apps/shared/db_connect.php';
-require_once '../includes/functions.php';
+/***  CHECK IF PAGE WAS POSTED TO  ***/
+if (!isset($_SERVER["REQUEST_METHOD"]) ||
+	$_SERVER["REQUEST_METHOD"] != "POST") {
+	exit;
+}
 
-define("APP_PATH", "http://" . $_SERVER['HTTP_HOST'] . "/bootstrap/apps/login_system/");
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+require_once '../includes/functions.php';
 
 if (isset($_POST['email'], $_POST['p'])) {
 	$email = $_POST['email'];
 	$password = $_POST['p']; // hashed password
 
 	if (login($email, $password, $conn) == true) {
-		// Login success
-		header('Location: ' . APP_PATH . '?page=protected_page');
-		exit();
+		echo 1;
 	}
 	else {
-		// Login failed
-		header('Location: ../index.php?error=1');
-		exit();
+		echo 0;
 	}
 }
 else {
 	// The correct POST variables were not sent to this page
-	echo 'Invalid Request<br />';
+	header('Location: ../index.php?err=invalid_request');
 }
-
 ?>

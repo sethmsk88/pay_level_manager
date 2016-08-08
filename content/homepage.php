@@ -102,40 +102,35 @@
 				$actMaxSal = '';
 				$benchmark = '';
 
-				/*
-					If queried values are not null, populate monetary
-					variables with their respective formatted money string
-				*/
-				/* If adjusted rec min salary is not null, use it */
+				// If adjusted rec min salary is not null, use it
 				if (!is_null($row['MinSalAdjusted']) && $row['MinSalAdjusted'] > 0)
-					$minSal = '$' . number_format($row['MinSalAdjusted'], 2, '.', ',');
+					$minSal = $row['MinSalAdjusted'];
 				else if (!is_null($row['MinSal']) && $row['MinSal'] > 0)
-					$minSal = '$' . number_format($row['MinSal'], 2, '.', ',');
-				
-				/* If adjusted rec med salary is not null, use it */
-				if (!is_null($row['MedSalAdjusted']) && $row['MedSalAdjusted'] > 0)
-					$medSal = '$' . number_format($row['MedSalAdjusted'], 2, '.', ',');
-				else if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
-					$medSal = '$' . number_format($row['MedSal'], 2, '.', ',');
-				
-				/* If adjusted rec max salary is not null, use it */
-				if (!is_null($row['MaxSalAdjusted']) && $row['MaxSalAdjusted'] > 0)
-					$maxSal = '$' . number_format($row['MaxSalAdjusted'], 2, '.', ',');
-				else if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
-					$maxSal = '$' . number_format($row['MaxSal'], 2, '.', ',');
-				
-				if (!is_null($row['ActMinSal']) && $row['ActMinSal'] > 0)
-					$actMinSal = '$' . number_format($row['ActMinSal'], 2, '.', ',');
-				
-				if (!is_null($row['ActMedSal']) && $row['ActMedSal'] > 0)
-					$actMedSal = '$' . number_format($row['ActMedSal'], 2, '.', ',');
-				
-				if (!is_null($row['ActMaxSal']) && $row['ActMaxSal'] > 0)
-					$actMaxSal = '$' . number_format($row['ActMaxSal'], 2, '.', ',');
-				
-				if (!is_null($row['Benchmark']) && $row['Benchmark'] > 0)
-					$benchmark = '$' . number_format($row['Benchmark'], 2, '.', ',');
+					$minSal = $row['MinSal'];
 
+				// If adjusted rec med salary is not null, use it
+				if (!is_null($row['MedSalAdjusted']) && $row['MedSalAdjusted'] > 0)
+					$medSal = $row['MedSalAdjusted'];
+				else if (!is_null($row['MedSal']) && $row['MedSal'] > 0)
+					$row['MedSal'];
+
+				// If adjusted rec max salary is not null, use it
+				if (!is_null($row['MaxSalAdjusted']) && $row['MaxSalAdjusted'] > 0)
+					$maxSal = $row['MaxSalAdjusted'];
+				else if (!is_null($row['MaxSal']) && $row['MaxSal'] > 0)
+					$maxSal = $row['MaxSal'];
+
+				if (!is_null($row['ActMinSal']) && $row['ActMinSal'] > 0)
+					$actMinSal = $row['ActMinSal'];
+
+				if (!is_null($row['ActMedSal']) && $row['ActMedSal'] > 0)
+					$actMedSal = $row['ActMedSal'];
+
+				if (!is_null($row['ActMaxSal']) && $row['ActMaxSal'] > 0)
+					$actMaxSal = $row['ActMaxSal'];
+
+				if (!is_null($row['Benchmark']) && $row['Benchmark'] > 0)
+					$benchmark = $row['Benchmark'];
 			?>
 
 			<tr
@@ -150,14 +145,52 @@
 				<td><?= $row['PayLevel'] ?></td>
 					<td><?= $row['JobCode'] ?></td>
 					<td><?= $row['JobTitle'] ?></td>
-					<td><?= $minSal ?></td>
-					<td><?= $medSal ?></td>
-					<td><?= $maxSal ?></td>
-					<td><?= $actMinSal ?></td>
-					<td><?= $actMedSal ?></td>
-					<td><?= $actMaxSal ?></td>
-					<td><?= $benchmark ?></td>
-					<!-- <td><?= convertFLSA($row['FLSA'], 'descr') ?></td> -->
+					<td>
+						<?php 
+							if (!is_null($minSal) && $minSal > 0)
+								echo '$' . number_format($minSal, 2, '.', ',');
+						?>
+					</td>
+					<td>
+						<?php
+							if (!is_null($medSal) && $medSal > 0)
+								echo '$' . number_format($medSal, 2, '.', ',');
+						?>
+					</td>
+					<td>
+						<?php
+							if (!is_null($maxSal) && $maxSal > 0)
+								echo '$' . number_format($maxSal, 2, '.', ',');
+						?>
+					</td>
+					<td>
+						<?php
+							if (!is_null($actMinSal) && $actMinSal > 0)
+								echo '$' . number_format($actMinSal, 2, '.', ',');
+						?>
+					</td>
+					<td>
+						<?php
+							if (!is_null($actMedSal) && $actMedSal > 0)
+								echo '$' . number_format($actMedSal, 2, '.', ',');
+						?>
+					</td>
+					<td>
+						<?php
+							if (!is_null($actMaxSal) && $actMaxSal > 0)
+								echo '$' . number_format($actMaxSal, 2, '.', ',');
+						?>
+					</td>
+					<?php
+						if ($benchmark < $actMedSal * .9)
+							echo '<td class="blueCircle">';
+						else if ($benchmark > $actMedSal * 1.1)
+							echo '<td class="redCircle">';
+						else
+							echo '<td>';
+						echo '$' . number_format($benchmark, 2, '.', ',');
+						echo '</td>';
+					?>
 					<td><?= getFLSA($conn, $row['JobCode'], $row['PayPlan'], $row['FLSA']) ?></td>
 					<td><?= $row['UnionCode'] ?></td>
 					<td><?= $row['OldPayGrade'] ?></td>

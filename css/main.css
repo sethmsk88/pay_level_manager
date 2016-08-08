@@ -62,7 +62,15 @@ table#payLevels > tbody > tr:hover{
 }
 
 table#payLevels > tbody > tr > td:nth-of-type(10){
-	background-color: rgba(255,136,0,.3);
+	max-width: 100px;
+}
+
+.blueCircle {
+	background-color: rgba(0,0,255,.5);
+}
+
+.redCircle {
+	background-color: rgba(255,0,0,.5);
 }
 
 table#payLevelRanges-table th:hover {

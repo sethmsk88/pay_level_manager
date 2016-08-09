@@ -183,9 +183,9 @@
 					</td>
 					<?php
 						if ($benchmark < $actMedSal * .9)
-							echo '<td class="blueCircle">';
-						else if ($benchmark > $actMedSal * 1.1)
 							echo '<td class="redCircle">';
+						else if ($benchmark > $actMedSal * 1.1)
+							echo '<td class="blueCircle">';
 						else
 							echo '<td>';
 						echo '$' . number_format($benchmark, 2, '.', ',');

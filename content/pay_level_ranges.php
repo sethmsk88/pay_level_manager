@@ -44,6 +44,7 @@
 			MAX(CAST(OldPayGrade AS SIGNED)) AS OldPayGrade_Max
 		FROM hrodt.pay_levels
 		WHERE OldPayGrade IS NOT NULL AND
+			OldPayGrade <> 'NA' AND
 			PayLevel = ?
 	";
 
@@ -250,7 +251,7 @@
 				<div
 					data-toggle="popover"
 					data-content="Crosswalk to former BOR (1993-2006)paygrades used by FAMU last update 2015 with minimum wage">
-					Old Pay Grade
+					Old Pay Grades
 				</div>
 			</th>
 			<th>

@@ -9,8 +9,6 @@ function showModal(modalID) {
 
 	// Show the new form
 	$modal.slideDown();
-
-	console.log(modalID);
 }
 
 /**
@@ -41,11 +39,14 @@ function rowClickHandler(e) {
 	/* Store all of the row's cell values in an array */
 	$targetRow.children().each(function(i, val) {
 		$val = $(val).text();
-		val_array[i] = $val;
+		val_array[i] = $val.replace(/\n/g,'').trim();
 	});
 
+	//console.log(val_array);
+	//console.log("'" + val_array[3].replace(/\n/g,'').trim() + "'");
+
 	/* Populate fields in modal form */
-	$('#payLevel-modalForm').text(val_array[0]);
+	$('#payLevel-modalForm').val(val_array[0]);
 	$('#jobCode-modalForm').text(val_array[1]);
 	$('#jobTitle-modalForm').text(val_array[2]);
 	$('#recMinSal-modalForm').val(val_array[3]);
@@ -145,6 +146,7 @@ $(document).ready(function(){
 				if (response['error'] == undefined) {
 										
 					// Update cells in table
+					setCell(row_idx, 0, response['payLevel']);
 					setCell(row_idx, 3, response['recMinSal'].formatMoney());
 					setCell(row_idx, 4, response['recMedSal'].formatMoney());
 					setCell(row_idx, 5, response['recMaxSal'].formatMoney());

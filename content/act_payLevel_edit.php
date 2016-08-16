@@ -41,6 +41,7 @@
 		exit;
 	}
 
+	$param_int_payLevel = $_POST['payLevel'];
 	$param_double_MinSalAdjusted = $adjRecMinSal;
 	$param_double_MedSalAdjusted = $adjRecMedSal;
 	$param_double_MaxSalAdjusted = $adjRecMaxSal;
@@ -49,7 +50,8 @@
 
 	$update_payLevel_sql = "
 		UPDATE hrodt.pay_levels
-		SET MinSalAdjusted = ?,
+		SET PayLevel = ?,
+			MinSalAdjusted = ?,
 			MedSalAdjusted = ?,
 			MaxSalAdjusted = ?,
 			Benchmark = ?
@@ -61,7 +63,8 @@
 		echo 'Prepare failed: (' . $conn->errno . ') ' . $conn->error;
 		exit;
 	}
-	else if (!$stmt->bind_param("dddds",
+	else if (!$stmt->bind_param("ddddds",
+		$param_int_payLevel,
 		$param_double_MinSalAdjusted,
 		$param_double_MedSalAdjusted,
 		$param_double_MaxSalAdjusted,
@@ -103,6 +106,8 @@
 
 	/* Create associative array to hold updated values */
 	$returnValues = array();
+
+	$returnValues['payLevel'] = $payLevel_row['PayLevel'];
 
 	if (is_null($payLevel_row['Benchmark']) ||
 		$payLevel_row['Benchmark'] == 0) {

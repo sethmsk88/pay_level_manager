@@ -247,7 +247,13 @@
 			<table>
 				<tr>	
 					<td class="modalLabel">Pay Level</td>
-					<td id="payLevel-modalForm" class="textField"></td>
+					<td>
+						<input
+							type="text"
+							name="payLevel"
+							id="payLevel-modalForm"
+							class="form-control">
+					</td>
 				</tr>
 				<tr>
 					<td class="modalLabel">Job Code</td>

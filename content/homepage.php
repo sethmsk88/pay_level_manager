@@ -182,14 +182,18 @@
 						?>
 					</td>
 					<?php
-						if ($benchmark < $actMedSal * .9)
-							echo '<td class="redCircle">';
-						else if ($benchmark > $actMedSal * 1.1)
-							echo '<td class="blueCircle">';
-						else
-							echo '<td>';
-						echo '$' . number_format($benchmark, 2, '.', ',');
-						echo '</td>';
+						if ($benchmark != "") {
+							if ($benchmark < $actMedSal * .9)
+								echo '<td class="redCircle">';
+							else if ($benchmark > $actMedSal * 1.1)
+								echo '<td class="blueCircle">';
+							else
+								echo '<td>';
+							echo '$' . number_format($benchmark, 2, '.', ',');
+							echo '</td>';
+						} else {
+							echo '<td></td>';
+						}
 					?>
 					<td><?= getFLSA($conn, $row['JobCode'], $row['PayPlan'], $row['FLSA']) ?></td>
 					<td><?= $row['UnionCode'] ?></td>

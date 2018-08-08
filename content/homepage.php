@@ -136,7 +136,7 @@
 			<tr
 				id="row-<?= $row_idx ?>"
 				class="editable"
-				<?php if ($loggedIn) {
+				<?php if ($GLOBALS['LOGGED_IN'] AND !is_null($GLOBALS['ACCESS_LEVEL'])) {
 					// Only include event handler for edit form if logged in
 					echo 'onclick="rowClickHandler(event);"';
 				} ?>
@@ -213,7 +213,7 @@
 
 
 <!-- Edit Pay Level Form (absolutely positioned modal) -->
-<?php if ($loggedIn) { // BEGIN Must be logged in ?>
+<?php if ($GLOBALS['LOGGED_IN'] AND !is_null($GLOBALS['ACCESS_LEVEL'])) { ?>
 <div
 	id="editPayLevel-cont"
 	class="modalForm">

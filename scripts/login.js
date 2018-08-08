@@ -13,7 +13,7 @@ $(document).ready(function() {
 		/* Submit the login form */
 		$.ajax({
 			type: 'post',
-			url: './content/act_process_login.php',
+			url: '/bootstrap/apps/shared/act_authenticate_user.php',
 			data: $form.serialize(),
 			success: function(response) {
 
@@ -49,7 +49,6 @@ $(document).ready(function() {
 	necessary if there is no SSL.
 */
 function formhash(form) {
-
 	var hashedPassword = hex_sha512($('#password').val());
 
 	// Check to see if input p exists

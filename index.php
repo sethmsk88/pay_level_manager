@@ -1,18 +1,16 @@
 <?php
-	$APP_homepage = "homepage";
-
-	define("APP_NAME", "Pay Level Manager");
-	define("APP_PATH", "http://" . $_SERVER['HTTP_HOST'] . "./bootstrap/apps/login_system/");
-
 	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/login_functions.php';;
+
     require_once "./includes/functions.php";
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/pay_level_manager/includes/globals.php';
 
     // Start session or regenerate session id
     sec_session_start();
 
     // Check to see if User is logged in
-    $loggedIn = login_check($conn);
+    login_check($GLOBALS['APP_ID'], $conn);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +19,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo APP_NAME; ?></title>
+    <title><?php echo $GLOBALS['APP_NAME']; ?></title>
 
     <!-- Linked stylesheets -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -84,7 +82,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><?php echo APP_NAME; ?></a>
+                <a class="navbar-brand" href="#"><?php echo $GLOBALS['APP_NAME']; ?></a>
             </div>
             <div id="navbarCollapse" class="collapse navbar-collapse">
                 <!-- Nav links -->
@@ -97,7 +95,7 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <?php if ($loggedIn) { ?>
+                    <?php if ($GLOBALS['LOGGED_IN'] AND !is_null($GLOBALS['ACCESS_LEVEL'])) { ?>
                     <li class="dropdown" style="cursor:pointer;">
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="glyphicon glyphicon-user" style="margin-right:8px;"></span><?php echo $_SESSION['firstName']; ?> <span class="glyphicon glyphicon-triangle-bottom" style="margin-left:4px;"></span></a>
                         <ul class="dropdown-menu">
@@ -134,7 +132,7 @@
     		$filePath = './content/' . $_GET["page"] . '.php';
     	}
     	else{
-    		$filePath = './content/' . $APP_homepage . '.php';
+    		$filePath = './content/' . $GLOBALS['APP_HOMEPAGE'] . '.php';
     	}
 
     	if (file_exists($filePath)){

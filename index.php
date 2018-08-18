@@ -1,5 +1,5 @@
 <?php
-	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/dbInfo.php';
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/class_specs/vendor/autoload.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/db_connect.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/apps/shared/login_functions.php';;
 
@@ -22,7 +22,7 @@
     <title><?php echo $GLOBALS['APP_NAME']; ?></title>
 
     <!-- Linked stylesheets -->
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="/bootstrap/scripts/DataTables-1.10.7/media/css/jquery.dataTables.css" rel="stylesheet">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <link href="../css/navbar-custom1.css" rel="stylesheet">
@@ -103,7 +103,11 @@
                                 <a id="settings-link" href="?page=settings">Settings</a>
                             </li>
                             <li>
-                                <a id="logout-link" href="./content/act_logout.php"> Log out</a>
+                                <?php
+                                    $redirectUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                    $logoutUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/bootstrap/apps/shared/act_logout.php?redirect=' . $redirectUrl;
+                                ?>
+                                <a id="logout-link" href="<?= $logoutUrl ?>"> Log out</a>
                             </li>
                         </ul>
                     </li>

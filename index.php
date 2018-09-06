@@ -104,8 +104,8 @@
                             </li>
                             <li>
                                 <?php
-                                    $redirectUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                                    $logoutUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/bootstrap/apps/shared/act_logout.php?redirect=' . $redirectUrl;
+                                    $redirectUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                    $logoutUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/bootstrap/apps/shared/act_logout.php?redirect=' . $redirectUrl;
                                 ?>
                                 <a id="logout-link" href="<?= $logoutUrl ?>"> Log out</a>
                             </li>
